@@ -42,18 +42,22 @@ body.theme-midnight {
 }
 
 body.theme-illuminati {
-  --bg-deep: #030806;
-  --bg-surface: rgba(6, 18, 12, 0.84);
-  --border-subtle: rgba(0, 255, 157, 0.22);
-  --border-focus: rgba(0, 255, 157, 0.65);
-  --accent-gold: #00ff9d;
-  --accent-gold-gradient: linear-gradient(135deg, #00ff9d 0%, #059669 100%);
-  --accent-glow: rgba(0, 255, 157, 0.4);
-  --text-main: #e6fff4;
-  --text-muted: #7da895;
-  --text-dim: #446d5c;
-  --ambient-1: #00ff9d;
-  --ambient-2: #022c22;
+  --bg-deep: #050507;
+  --bg-surface: rgba(12, 12, 16, 0.88);
+  --bg-surface-hover: rgba(22, 22, 28, 0.92);
+  --bg-elevated: rgba(18, 18, 24, 0.85);
+  --border-subtle: rgba(212, 175, 55, 0.28);
+  --border-focus: rgba(229, 231, 235, 0.7);
+  --accent-gold: #d4af37;
+  --accent-gold-gradient: linear-gradient(135deg, #f3cf7a 0%, #d4af37 50%, #aa820a 100%);
+  --accent-glow: rgba(212, 175, 55, 0.4);
+  --platinum: #e5e7eb;
+  --platinum-glow: rgba(229, 231, 235, 0.35);
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --text-dim: #94a3b8;
+  --ambient-1: #d4af37;
+  --ambient-2: #1e1e24;
 }
 
 body.theme-desert {
@@ -413,15 +417,18 @@ html, body {
 
 .mascot-svg {
   width: 100%;
-  max-width: 240px;
+  max-width: 220px;
   filter: drop-shadow(0 12px 30px var(--accent-glow));
   animation: floatOrb 5s ease-in-out infinite;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  z-index: 2;
+  margin-bottom: -15px;
 }
 
 @keyframes floatOrb {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  50% { transform: translateY(-9px); }
 }
 
 .mascot-svg.pulse-hit {
@@ -429,7 +436,204 @@ html, body {
 }
 
 @keyframes pulseHit {
-  50% { transform: scale(1.06) translateY(-12px); filter: drop-shadow(0 0 40px var(--accent-gold)); }
+  50% { transform: scale(1.06) translateY(-14px); filter: drop-shadow(0 0 40px var(--accent-gold)); }
+}
+
+/* Magic Lamp Artwork */
+.lampsvg {
+  width: 130px;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
+  animation: lampGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes lampGlow {
+  0% { filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 4px rgba(226, 181, 74, 0.2)); }
+  100% { filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 16px var(--accent-glow)); }
+}
+
+/* Illuminati hides the genie lamp since it has the levitating pyramid base */
+body.theme-illuminati .lampsvg {
+  display: none;
+}
+body.theme-illuminati .mascot-svg {
+  margin-bottom: 0;
+  max-width: 240px;
+}
+
+/* Smoke tail & puff animations */
+.genie-tail {
+  animation: tailWave 3s ease-in-out infinite;
+  transform-origin: 100px 150px;
+}
+@keyframes tailWave {
+  50% { transform: skewX(-5deg); }
+}
+
+.genie-puff2 {
+  animation: puffWave 3.5s ease-in-out infinite;
+  transform-origin: 50% 0;
+}
+@keyframes puffWave {
+  50% { transform: translateX(6px) scaleY(1.05); }
+}
+
+.genie-smoke-particles circle {
+  animation: smokeRise 4s ease-in infinite;
+  transform-origin: center;
+  opacity: 0;
+}
+@keyframes smokeRise {
+  0% { opacity: 0; transform: translateY(14px) scale(0.6); }
+  30% { opacity: 0.45; }
+  100% { opacity: 0; transform: translateY(-60px) scale(1.8); }
+}
+
+.genie-eyes {
+  animation: genieBlink 5s infinite;
+  transform-origin: 100px 62px;
+}
+@keyframes genieBlink {
+  0%, 92%, 97%, 100% { transform: scaleY(1); }
+  94% { transform: scaleY(0.1); }
+}
+
+/* ==========================================================================
+   CINEMATIC INTRO OVERLAY
+   ========================================================================== */
+.op {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: radial-gradient(ellipse at 50% 55%, #180d2a 0%, #06050b 70%, #020205 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s ease;
+}
+
+.op.out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.rays {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 160vmax;
+  height: 160vmax;
+  margin: -80vmax 0 0 -80vmax;
+  background: repeating-conic-gradient(rgba(226, 181, 74, 0.12) 0 4deg, transparent 4deg 12deg);
+  mask-image: radial-gradient(circle, #000 0%, transparent 45%);
+  -webkit-mask-image: radial-gradient(circle, #000 0%, transparent 45%);
+  animation: rayRotate 120s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rayRotate {
+  to { transform: rotate(360deg); }
+}
+
+#opfx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid var(--accent-gold);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.stg {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+  user-select: none;
+}
+
+.om {
+  width: min(38vh, 260px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.om .mascot-svg {
+  width: 100%;
+  margin-bottom: -10px;
+}
+
+.om .lampsvg {
+  width: 120px;
+}
+
+.ot {
+  width: min(720px, 86vw);
+  margin-top: -2vh;
+}
+
+.ot canvas {
+  width: 100%;
+  display: block;
+}
+
+.otag {
+  margin-top: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: clamp(10px, 1.4vw, 13px);
+  font-weight: 600;
+  color: #eeddbb;
+  opacity: 0.8;
+  text-align: center;
+}
+
+.tap {
+  margin-top: 26px;
+  color: var(--accent-gold);
+  letter-spacing: 0.32em;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  animation: tapBlink 1.8s infinite ease-in-out;
+  padding: 8px 18px;
+  border: 1px solid rgba(226, 181, 74, 0.3);
+  border-radius: 999px;
+  background: rgba(226, 181, 74, 0.08);
+}
+
+@keyframes tapBlink {
+  0%, 100% { opacity: 0.95; transform: scale(1); box-shadow: 0 0 12px rgba(226, 181, 74, 0.2); }
+  50% { opacity: 0.35; transform: scale(0.97); box-shadow: 0 0 0 rgba(226, 181, 74, 0); }
+}
+
+/* Ambient canvas background behind app */
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* Interactive Panel */

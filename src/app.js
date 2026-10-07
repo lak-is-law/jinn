@@ -122,37 +122,77 @@ function toggleMusic() {
 }
 
 // Mascot SVG Generator (Genie / All-Seeing Eye of Providence)
+// Magical Golden Lamp SVG
+const LAMP_SVG = `<svg class="lampsvg" viewBox="0 0 200 80">
+  <path d="M30 40C30 66 70 76 100 76C130 76 170 66 170 40Z" fill="#c9922c"/>
+  <path d="M26 38H174" stroke="#f0c860" stroke-width="6" stroke-linecap="round"/>
+  <path d="M170 40C186 34 192 22 196 12C184 20 176 24 168 28Z" fill="#c9922c"/>
+  <path d="M30 42C10 40 6 24 18 18" stroke="#c9922c" stroke-width="6" fill="none"/>
+  <ellipse cx="100" cy="40" rx="30" ry="6" fill="#f0c860"/>
+  <path d="M70 60Q100 70 130 60" stroke="#8a5f1a" stroke-width="3" fill="none"/>
+</svg>`;
+
+// Mascot SVG Generator (Genie with Lamp & Bottom Smoke OR Gold/Platinum/Black Eye of Providence)
 function renderMascot(emotion = 'idle') {
   const isIlluminati = document.body.classList.contains('theme-illuminati');
 
   if (isIlluminati) {
-    return `<svg class="mascot-svg" viewBox="0 0 200 240" fill="none">
-      <defs>
-        <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#00ff9d" stop-opacity="0.8"/>
-          <stop offset="100%" stop-color="#00ff9d" stop-opacity="0"/>
-        </radialGradient>
-        <linearGradient id="pyrGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#0d3822"/>
-          <stop offset="100%" stop-color="#02140a"/>
-        </linearGradient>
-      </defs>
-      <circle cx="100" cy="110" r="85" stroke="rgba(0,255,157,0.2)" stroke-width="1.5" stroke-dasharray="4,4"/>
-      <circle cx="100" cy="110" r="70" fill="url(#eyeGlow)" opacity="0.3"/>
-      <!-- Pyramid Base -->
-      <polygon points="100,20 25,180 175,180" fill="url(#pyrGrad)" stroke="#00ff9d" stroke-width="2"/>
-      <line x1="45" y1="140" x2="155" y2="140" stroke="rgba(0,255,157,0.3)" stroke-width="1.5"/>
-      <line x1="60" y1="110" x2="140" y2="110" stroke="rgba(0,255,157,0.3)" stroke-width="1.5"/>
-      <!-- Floating Eye of Providence -->
-      <polygon points="100,20 65,85 135,85" fill="#031f10" stroke="#00ff9d" stroke-width="2.5"/>
-      <path d="M78 62Q100 44 122 62Q100 80 78 62Z" fill="#021208" stroke="#00ff9d" stroke-width="2"/>
-      <circle cx="100" cy="62" r="8" fill="#00ff9d"/>
-      <circle cx="100" cy="62" r="3.5" fill="#021208"/>
-      <circle cx="98" cy="60" r="1.5" fill="#fff"/>
-    </svg>`;
+    // Pure Gold, Black, and Platinum Illuminati Pyramid & All-Seeing Eye
+    const eyeStroke = emotion === 'win' ? '#f5d061' : emotion === 'lose' ? '#cbd5e1' : '#e6b84a';
+    return `<div class="mascot-chamber">
+      <svg class="mascot-svg mascot-illuminati" viewBox="0 0 200 240" fill="none" style="overflow:visible">
+        <defs>
+          <radialGradient id="illumGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#f5d061" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#d4af37" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="pyrGradGold" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#18181f"/>
+            <stop offset="100%" stop-color="#08080a"/>
+          </linearGradient>
+          <linearGradient id="goldMetallic" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#fdf0cd"/>
+            <stop offset="50%" stop-color="#d4af37"/>
+            <stop offset="100%" stop-color="#997210"/>
+          </linearGradient>
+          <linearGradient id="platinumMetallic" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="50%" stop-color="#e2e8f0"/>
+            <stop offset="100%" stop-color="#94a3b8"/>
+          </linearGradient>
+          <filter id="goldShine">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+        <!-- Sacred Geometry Platinum Ring -->
+        <circle cx="100" cy="115" r="88" stroke="url(#platinumMetallic)" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
+        <circle cx="100" cy="115" r="72" fill="url(#illumGlow)" opacity="0.4"/>
+        <!-- Great Obsidian Pyramid Base -->
+        <polygon points="100,22 24,182 176,182" fill="url(#pyrGradGold)" stroke="url(#goldMetallic)" stroke-width="2.5"/>
+        <!-- Platinum Masonry Mortar Lines -->
+        <line x1="44" y1="148" x2="156" y2="148" stroke="url(#platinumMetallic)" stroke-width="1.2" opacity="0.7"/>
+        <line x1="58" y1="120" x2="142" y2="120" stroke="url(#platinumMetallic)" stroke-width="1.2" opacity="0.7"/>
+        <line x1="72" y1="94" x2="128" y2="94" stroke="url(#platinumMetallic)" stroke-width="1.2" opacity="0.7"/>
+        <!-- Floating Golden Capstone -->
+        <polygon points="100,22 66,88 134,88" fill="#121218" stroke="url(#goldMetallic)" stroke-width="2.5" filter="url(#goldShine)"/>
+        <!-- Eye of Providence -->
+        <g class="genie-eyes" transform="translate(0, 4)">
+          <path d="M78 64Q100 46 122 64Q100 82 78 64Z" fill="#08080c" stroke="url(#platinumMetallic)" stroke-width="2"/>
+          <circle cx="100" cy="64" r="8.5" fill="url(#goldMetallic)"/>
+          <ellipse cx="100" cy="64" rx="3.5" ry="7.5" fill="#000"/>
+          <circle cx="98" cy="62" r="1.8" fill="#fff"/>
+        </g>
+        <!-- Golden Meridian Compass Lines -->
+        <line x1="100" y1="184" x2="100" y2="224" stroke="url(#goldMetallic)" stroke-width="2" opacity="0.8"/>
+        <line x1="24" y1="182" x2="10" y2="212" stroke="url(#platinumMetallic)" stroke-width="1.8" opacity="0.6"/>
+        <line x1="176" y1="182" x2="190" y2="212" stroke="url(#platinumMetallic)" stroke-width="1.8" opacity="0.6"/>
+        <circle cx="100" cy="226" r="4.5" fill="url(#goldMetallic)"/>
+      </svg>
+    </div>`;
   }
 
-  // Classic Genie Mascot
+  // Classic Genie Mascot with Golden Lamp & Volumetric Smoke
   const mouthPaths = {
     win: 'M80 92Q100 114 120 92Z',
     lose: 'M82 98Q100 90 118 98',
@@ -161,48 +201,96 @@ function renderMascot(emotion = 'idle') {
   };
   const mouth = mouthPaths[emotion] || mouthPaths.idle;
 
-  return `<svg class="mascot-svg" viewBox="0 0 200 240">
-    <defs>
-      <radialGradient id="genieSkin" cx="40%" cy="30%">
-        <stop offset="0%" stop-color="#93c5fd"/>
-        <stop offset="100%" stop-color="#2563eb"/>
-      </radialGradient>
-      <radialGradient id="turbanGrad" cx="50%" cy="30%">
-        <stop offset="0%" stop-color="#fde047"/>
-        <stop offset="100%" stop-color="#ca8a04"/>
-      </radialGradient>
-      <radialGradient id="smokeAura">
-        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35"/>
-        <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
-      </radialGradient>
-    </defs>
-    <!-- Aura -->
-    <circle cx="100" cy="95" r="90" fill="url(#smokeAura)"/>
-    <!-- Tail Smoke -->
-    <path d="M70 145C50 175 75 195 95 215C102 225 96 235 100 240C104 235 98 225 105 215C125 195 150 175 130 145Z" fill="#3b82f6" opacity="0.85"/>
-    <!-- Body & Vest -->
-    <path d="M60 145Q60 110 100 105Q140 110 140 145Z" fill="#1e3a8a"/>
-    <path d="M62 120Q100 152 138 120L130 115Q100 138 70 115Z" fill="url(#turbanGrad)"/>
-    <!-- Head -->
-    <ellipse cx="100" cy="68" rx="30" ry="34" fill="url(#genieSkin)"/>
-    <!-- Eyes -->
-    <g>
-      <path d="M78 62Q88 54 98 62Q88 70 78 62Z" fill="#fff" stroke="#0f172a" stroke-width="2"/>
-      <path d="M102 62Q112 54 122 62Q112 70 102 62Z" fill="#fff" stroke="#0f172a" stroke-width="2"/>
-      <circle cx="88" cy="62" r="4.5" fill="#e11d48"/>
-      <circle cx="112" cy="62" r="4.5" fill="#e11d48"/>
-      <circle cx="88" cy="62" r="2" fill="#000"/>
-      <circle cx="112" cy="62" r="2" fill="#000"/>
-    </g>
-    <!-- Eyebrows & Nose -->
-    <path d="M74 52L96 58M126 52L104 58" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
-    <path d="M100 66L96 78Q100 80 104 78" stroke="#1e40af" fill="none" stroke-width="2"/>
-    <!-- Mouth -->
-    <path d="${mouth}" fill="${emotion === 'win' ? '#fff' : 'none'}" stroke="#0f172a" stroke-width="3" stroke-linejoin="round"/>
-    <!-- Turban & Ruby -->
-    <path d="M68 50Q70 18 100 18Q130 18 132 50Q100 36 68 50Z" fill="url(#turbanGrad)"/>
-    <path d="M100 12Q94 20 96 28Q100 34 104 28Q106 20 100 12Z" fill="#e11d48" stroke="#ca8a04" stroke-width="2"/>
-  </svg>`;
+  return `<div class="mascot-chamber">
+    <svg class="mascot-svg" viewBox="0 0 200 250" style="overflow:visible">
+      <defs>
+        <linearGradient id="smkGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#27407a"/>
+          <stop offset="100%" stop-color="#6f8fd0" stop-opacity="0.9"/>
+        </linearGradient>
+        <radialGradient id="genieHead" cx="0.4" cy="0.3">
+          <stop offset="0%" stop-color="#8fb0d4"/>
+          <stop offset="100%" stop-color="#3a527f"/>
+        </radialGradient>
+        <radialGradient id="genieAura">
+          <stop offset="0%" stop-color="#1fa6a0" stop-opacity="0.35"/>
+          <stop offset="60%" stop-color="#d9341c" stop-opacity="0.12"/>
+          <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="smokeTurb" x="-40%" y="-10%" width="180%" height="130%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.015 0.035" numOctaves="2" seed="3">
+            <animate attributeName="baseFrequency" dur="8s" values="0.015 0.035;0.025 0.055;0.015 0.035" repeatCount="indefinite"/>
+          </feTurbulence>
+          <feDisplacementMap in="SourceGraphic" scale="18"/>
+          <feGaussianBlur stdDeviation="2"/>
+        </filter>
+        <filter id="smokeBlur">
+          <feGaussianBlur stdDeviation="4"/>
+        </filter>
+      </defs>
+
+      <!-- Mystic Aura -->
+      <circle cx="100" cy="95" r="95" fill="url(#genieAura)"/>
+
+      <!-- Rising Smoke Tail Connecting to Lamp -->
+      <g filter="url(#smokeTurb)" class="genie-tail">
+        <path d="M68 148C52 182 76 202 92 222C100 234 94 246 100 254C106 246 100 234 108 222C124 202 148 182 132 148Z" fill="url(#smkGrad)"/>
+        <path d="M72 150C60 180 80 200 100 214C112 222 104 240 112 252C88 246 84 224 78 206C72 190 70 168 72 150Z" fill="#4a64b0" opacity="0.75" class="genie-puff2"/>
+      </g>
+
+      <!-- Ambient Smoke Puffs -->
+      <g class="genie-smoke-particles" fill="#8aa6d8" filter="url(#smokeBlur)">
+        <circle cx="46" cy="150" r="14"/>
+        <circle cx="154" cy="146" r="12" style="animation-delay:1.3s"/>
+        <circle cx="100" cy="200" r="16" style="animation-delay:2.1s"/>
+        <circle cx="68" cy="218" r="12" style="animation-delay:0.7s"/>
+        <circle cx="134" cy="220" r="13" style="animation-delay:2.8s"/>
+      </g>
+
+      <!-- Robe & Vest -->
+      <path d="M62 150Q60 112 100 106Q140 112 138 150Z" fill="#27407a"/>
+      <path d="M64 120Q100 156 136 120L128 116Q100 140 72 116Z" fill="#E2B54A"/>
+      <path d="M58 140Q100 118 142 140Q144 154 132 154Q100 138 68 154Q56 154 58 140Z" fill="#3a5694"/>
+      <rect x="60" y="141" width="8" height="12" fill="#E2B54A"/>
+      <rect x="132" y="141" width="8" height="12" fill="#E2B54A"/>
+
+      <!-- Turban Wings & Gem -->
+      <path d="M70 40L52 112L76 106L80 58Z M130 40L148 112L124 106L120 58Z" fill="#E2B54A"/>
+      <g stroke="#1fa6a0" stroke-width="3">
+        <path d="M64 70L78 66M60 86L77 82M56 102L76 98M136 70L122 66M140 86L123 82M144 102L124 98"/>
+      </g>
+
+      <!-- Head & Golden Earrings -->
+      <ellipse cx="100" cy="66" rx="31" ry="35" fill="url(#genieHead)"/>
+      <circle cx="68" cy="78" r="5" fill="none" stroke="#E2B54A" stroke-width="2"/>
+      <circle cx="132" cy="78" r="5" fill="none" stroke="#E2B54A" stroke-width="2"/>
+
+      <!-- Eyes & Brow -->
+      <g class="genie-eyes">
+        <path d="M76 62Q86 54 96 62Q86 70 76 62ZM104 62Q114 54 124 62Q114 70 104 62Z" fill="#fff" stroke="#000" stroke-width="2.5"/>
+        <path d="M73 62L62 57M127 62L138 57" stroke="#000" stroke-width="3"/>
+        <g id="geniePupils">
+          <circle cx="86" cy="62" r="4.5" fill="#D9341C"/>
+          <circle cx="114" cy="62" r="4.5" fill="#D9341C"/>
+          <circle cx="86" cy="62" r="1.8" fill="#000"/>
+          <circle cx="114" cy="62" r="1.8" fill="#000"/>
+        </g>
+      </g>
+      <path d="M72 50L96 57M128 50L104 57" stroke="#0E0908" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M100 66L96 79Q100 81 104 79" stroke="#243456" fill="none" stroke-width="2"/>
+
+      <!-- Mouth Expression -->
+      <path d="${mouth}" fill="${emotion === 'win' ? '#fff' : 'none'}" stroke="#0E0908" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M94 98H106L104 124H96Z" fill="#E2B54A"/>
+      <path d="M95 108H105M95 116H105" stroke="#1fa6a0" stroke-width="2"/>
+
+      <!-- Turban Dome & Ruby -->
+      <path d="M68 52Q70 20 100 20Q130 20 132 52Q100 38 68 52Z" fill="#E2B54A"/>
+      <path d="M70 45Q100 31 130 45" stroke="#1fa6a0" stroke-width="3" fill="none"/>
+      <path d="M100 12Q92 20 96 30Q100 36 104 30Q108 20 100 12Z" fill="#D9341C" stroke="#E2B54A" stroke-width="2"/>
+    </svg>
+    ${LAMP_SVG}
+  </div>`;
 }
 
 // Lore Dialogues
@@ -406,9 +494,7 @@ function render() {
   container.innerHTML = `
     ${headerHtml}
     <div class="oracle-stage">
-      <div class="mascot-chamber">
-        ${renderMascot(STATE.screen)}
-      </div>
+      ${renderMascot(STATE.screen)}
       <div class="interactive-panel">
         ${bodyHtml}
       </div>
@@ -608,6 +694,122 @@ if (canvas) {
     requestAnimationFrame(animateParticles);
   }
   animateParticles();
+}
+
+// ==========================================================================
+// CINEMATIC INTRO SPLASH & TITLE ENGINE
+// ==========================================================================
+const op = document.getElementById('op');
+const optitle = document.getElementById('optitle');
+let ot = optitle ? optitle.getContext('2d') : null;
+const om = document.getElementById('om');
+if (om) {
+  om.innerHTML = renderMascot('idle');
+}
+
+// Procedural Lava Title Canvas
+let tLava = 0;
+const pl = document.createElement('canvas');
+pl.width = 112;
+pl.height = 33;
+const pc = pl.getContext('2d');
+const im = pc ? pc.createImageData(112, 33) : null;
+const JP = new Path2D('M173 6L231 6L231 179A75 75 0 0 1 81 179L139 179A17 17 0 0 0 173 179Z M281 6H339V254H281Z M389 254L389 6L449 6L521 150L521 6L579 6L579 254L519 254L447 110L447 254Z M629 254L629 6L689 6L761 150L761 6L819 6L819 254L759 254L687 110L687 254Z');
+
+function renderLavaTitle() {
+  if (!ot || !im) return;
+  tLava += 0.02;
+  const d = im.data;
+  for (let y = 0; y < 33; y++) {
+    for (let x = 0; x < 112; x++) {
+      const v = (Math.sin(x * 0.16 + tLava) + Math.sin(y * 0.24 - tLava * 1.3) + Math.sin((x + y) * 0.1 + tLava * 0.7) + Math.sin(Math.hypot(x - 56, y - 16) * 0.2 - tLava) + 4) / 8;
+      const c = Math.min(1, v * v * 1.6);
+      const k = (y * 112 + x) * 4;
+      d[k] = 45 + 195 * c;
+      d[k + 1] = 5 + 175 * c * c * c;
+      d[k + 2] = 4 + 45 * Math.pow(c, 4);
+      d[k + 3] = 255;
+    }
+  }
+  pc.putImageData(im, 0, 0);
+  ot.clearRect(0, 0, 900, 260);
+  ot.imageSmoothingEnabled = true;
+  ot.drawImage(pl, 0, 0, 900, 260);
+  ot.globalCompositeOperation = 'destination-in';
+  ot.fillStyle = '#000';
+  ot.fill(JP);
+  ot.globalCompositeOperation = 'source-over';
+}
+
+// Intro Cosmic Spark Particles
+const of = document.getElementById('opfx');
+const oc = of ? of.getContext('2d') : null;
+const P = [];
+if (of) {
+  of.width = window.innerWidth;
+  of.height = window.innerHeight;
+  for (let i = 0; i < 170; i++) {
+    P.push({
+      a: Math.random() * 6.28,
+      r: 0.4 + Math.random() * 0.7,
+      s: (Math.random() - 0.5) * 2,
+      z: 1 + Math.random() * 2.6,
+      u: Math.random()
+    });
+  }
+}
+const t0 = performance.now();
+
+function animateIntro(ts) {
+  if (!op || !op.isConnected || op.classList.contains('out')) return;
+  requestAnimationFrame(animateIntro);
+  renderLavaTitle();
+  if (!oc || !of) return;
+  const tt = (ts - t0) / 1000;
+  const w = of.width;
+  const h = of.height;
+  const cx = w / 2;
+  const cy = h * 0.44;
+  const R = Math.hypot(w, h) / 2;
+  oc.clearRect(0, 0, w, h);
+  for (const p of P) {
+    let x, y, al;
+    if (tt < 1.7) {
+      const k = tt / 1.7;
+      x = cx + Math.cos(p.a + p.s * k * 3) * R * p.r * (1 - k * k * 0.97);
+      y = cy + Math.sin(p.a + p.s * k * 3) * R * p.r * (1 - k * k * 0.97) * 0.6;
+      al = 0.2 + 0.8 * k;
+    } else {
+      const k = tt - 1.7;
+      const sp = p.r * 300 * (1 - Math.exp(-k * 1.8)) + k * 14;
+      x = cx + Math.cos(p.a) * sp * 1.2;
+      y = cy + Math.sin(p.a) * sp * 0.7 - k * k * 16 * p.z;
+      al = Math.max(0, 1 - k / 3.4) * 0.9;
+    }
+    oc.fillStyle = `rgba(${p.u > 0.5 ? '226,181,74' : '217,52,28'},${al})`;
+    oc.fillRect(x, y, p.z, p.z);
+  }
+}
+if (op) {
+  requestAnimationFrame(animateIntro);
+}
+
+// User Enters via Tap
+function enterApp() {
+  if (!op || op.classList.contains('out')) return;
+  op.classList.add('out');
+  // Auto-play the Arabian instrumental track on user tap
+  if (!isMusicActive) {
+    toggleMusic();
+  }
+  setTimeout(() => {
+    if (op && op.parentNode) op.remove();
+    ot = null;
+  }, 900);
+}
+
+if (op) {
+  op.onclick = enterApp;
 }
 
 // Initial Boot

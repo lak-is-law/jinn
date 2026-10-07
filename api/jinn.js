@@ -1,30 +1,45 @@
 // Vercel serverless function.
-// Uses chain-of-thought candidate tracking so Jinn reasons methodically like real Akinator.
-const SYS = `You are Jinn, the master Akinator mind-reader. A player is secretly thinking of ANY famous or historical real person (living or dead, from any field, country, or era).
+// Systematic hierarchical bisection + candidate shortlist tracking (Akinator-level deduction).
+const SYS = `You are Jinn, the legendary Akinator mind-reader. A player is secretly thinking of ANY famous or historical real person (living or dead, worldwide, any discipline).
 
-YOUR REASONING PROCESS:
-You MUST maintain internal candidate hypotheses on every single turn.
-1. "candidates": Identify the top 3 to 6 real people who STRICTLY match ALL previous answers. Never include anyone who contradicts even one answer (e.g. if alive today = No, never include living people; if Asia = Yes, never include Western figures).
-2. "analysis": Briefly state how you can distinguish between these candidates.
-3. "result":
-   - If 2 or more candidates remain: Choose the single best yes/no question that roughly splits the candidate list in half (50/50 bisection). Keep question under 14 words.
-   - If ONLY 1 clear candidate remains with >=90% certainty (or at question 20): Output a GUESS.
-   - Under Question 6: Always ask a question to narrow down unless the player has answered multiple hyper-specific milestone clues.
-   - FORBIDDEN NAMES: Never include or guess any name in "Wrong guesses rejected by player".
+HOW AKINATOR ACTUALLY WORKS (HIERARCHICAL BISECTION):
+You must systematically eliminate 50% of the world on each question:
+Phase 1 (Q1 to Q4 - Foundations):
+- Living or Deceased?
+- Male or Female?
+- Primary Field: Arts & Entertainment (music, acting, writing) vs Athletics vs Politics & Leadership vs Science, Tech & Business?
+- Geography: Western (Americas/Europe) vs Eastern/Global South (Asia, Africa, Middle East)?
 
-OUTPUT JSON SCHEMA:
+Phase 2 (Q5 to Q10 - Domain Drilldown):
+- Drill into their specific niche (e.g., if Sports: soccer vs basketball vs cricket; if Arts: actor vs musician vs painter; if Tech/Business: founder vs CEO; if Politics: head of state vs activist).
+- Country of origin/nationality.
+- Era/Decade of prime fame.
+
+Phase 3 (Q11 to Q16 - Signature Isolation):
+- Specific iconic milestones, signature titles, awards (Oscar, Ballon d'Or, Nobel, Grammy), or famous associations that separate the top candidates.
+
+Phase 4 (Guessing):
+- DO NOT guess until you have verified their unique signature accomplishment and are down to 1 definitive candidate.
+- Never guess before Question 8 unless the player answered Yes to a rare, unmistakable fact.
+- At Question 20, you MUST make a guess.
+- ZERO CONTRADICTIONS: Every candidate and guess must 100% satisfy every single answered question.
+- FORBIDDEN NAMES: Never guess any name listed under "Wrong guesses rejected by player".
+
+Keep each question short (under 14 words) and strictly yes/no.
+
+OUTPUT FORMAT (STRICT JSON ONLY):
 {
-  "candidates": ["Person A", "Person B", "Person C"],
-  "analysis": "Short 1-sentence thought on what separates them",
+  "candidates": ["3-5 matching candidate names who fit ALL previous answers"],
+  "analysis": "Short 1-sentence thought on how to separate them",
   "result": {
     "type": "question",
     "text": "Short yes/no question under 14 words?"
   }
 }
-OR when guessing:
+OR when ready to guess:
 {
-  "candidates": ["Person A"],
-  "analysis": "Only Person A uniquely matches all clues",
+  "candidates": ["Full Name"],
+  "analysis": "Matches all criteria uniquely",
   "result": {
     "type": "guess",
     "name": "Full Name",
@@ -55,7 +70,7 @@ async function callGemini(model, promptText, apiKey) {
       generationConfig: {
         responseMimeType: "application/json",
         temperature: 0.1,
-        maxOutputTokens: 600
+        maxOutputTokens: 500
       }
     })
   });
@@ -82,11 +97,23 @@ export default async function handler(req, res) {
   if (!Array.isArray(ans) || !Array.isArray(rej) || ans.length > 20 || rej.length > 8) return res.status(400).end();
   const n = ans.length;
 
+  let guidance = "";
+  if (n < 4) {
+    guidance = `Question ${n + 1} of 20: Ask a high-entropy foundational question (alive today, gender, primary macro-field, or continent). Do NOT guess.`;
+  } else if (n < 8) {
+    guidance = `Question ${n + 1} of 20: Drill into specific craft, country, or era. Do NOT guess.`;
+  } else if (n < 15) {
+    guidance = `Question ${n + 1} of 20: Target distinguishing milestones, iconic titles, or records. Guess only if 1 single candidate remains.`;
+  } else if (n < 20) {
+    guidance = `Question ${n + 1} of 20: If you have a clear candidate in mind, make your guess. Otherwise, ask a decisive distinguishing question.`;
+  } else {
+    guidance = `Question 20 of 20: You MUST guess now.`;
+  }
+
   const promptText = "Current Game State:\n" +
-    (ans.map((a, i) => `Q${i + 1}: ${String(a[0]).slice(0, 140)} -> Answer: ${OPT[a[1]] ?? "No"}`).join("\n") || "(Game just started. Ask Question 1 to bisect the search space.)") +
+    (ans.map((a, i) => `Q${i + 1}: ${String(a[0]).slice(0, 140)} -> Answer: ${OPT[a[1]] ?? "No"}`).join("\n") || "(Round started. Ask Question 1.)") +
     (rej.length ? "\nWrong guesses rejected by player (NEVER GUESS THESE): " + rej.map(x => String(x).slice(0, 60)).join(", ") : "") +
-    `\n\nTotal questions answered: ${n} of 20.` +
-    (n >= 20 ? " Maximum questions reached: You MUST output a guess now." : "");
+    `\n\nTurn Goal:\n${guidance}`;
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
@@ -96,12 +123,10 @@ export default async function handler(req, res) {
   for (const model of CANDIDATE_MODELS) {
     try {
       const parsed = await callGemini(model, promptText, apiKey);
-      // Support both new structured result and fallback flat result
       const out = parsed?.result || (parsed?.type ? parsed : null);
       if (out && (out.type === "question" || out.type === "guess")) {
-        // Guardrail: don't guess before Q5 unless max questions reached
-        if (n < 5 && out.type === "guess") {
-          continue;
+        if (n < 7 && out.type === "guess") {
+          continue; // Prevent jumping to conclusions too early
         }
         return res.status(200).setHeader("content-type", "application/json").send(JSON.stringify(out));
       }

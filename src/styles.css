@@ -104,6 +104,19 @@ main {
   backdrop-filter: blur(8px);
   cursor: pointer;
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.nav-icon {
+  width: 13px;
+  height: 13px;
+  display: inline-block;
+  vertical-align: middle;
+  filter: brightness(0) invert(0.9);
+}
+.nav button:hover .nav-icon, .nav button.active .nav-icon {
+  filter: brightness(0);
 }
 .nav button:hover, .nav .gold, .nav.active {
   opacity: 1;
@@ -495,10 +508,19 @@ main {
 .mx {
   position: absolute;
   top: 14px; right: 16px;
-  font-size: 18px;
   background: none; border: none;
   color: var(--ink);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 6px;
+}
+.mx img {
+  width: 14px;
+  height: 14px;
+  display: block;
 }
 .mstats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center; }
 .mstats b { display: block; font-size: 22px; color: #7a4a10; }

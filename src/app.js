@@ -75,26 +75,37 @@ bgm.loop = true;
 bgm.volume = 0.35;
 let musicPlaying = false;
 
-function toggleMusic() {
+function updateMusicBtn() {
   const btn = document.getElementById('musicBtn');
+  if (!btn) return;
+  if (musicPlaying) {
+    btn.innerHTML = '<img src="assets/icons/music-on.svg" class="nav-icon" alt="" /> <span>Music: On</span>';
+    btn.classList.add('active');
+  } else {
+    btn.innerHTML = '<img src="assets/icons/music-off.svg" class="nav-icon" alt="" /> <span>Music: Off</span>';
+    btn.classList.remove('active');
+  }
+}
+
+function toggleMusic() {
   if (musicPlaying) {
     bgm.pause();
     musicPlaying = false;
-    if (btn) btn.textContent = '🔇 Music: Off';
+    updateMusicBtn();
   } else {
     bgm.play().then(() => {
       musicPlaying = true;
-      if (btn) btn.textContent = '🎵 Music: On';
+      updateMusicBtn();
     }).catch(e => console.log('Autoplay restriction:', e));
   }
 }
 
 /* Theme Switcher */
 const THEMES = [
-  { id: 'theme-midnight', name: '🌙 Midnight Tomb' },
-  { id: 'theme-desert', name: '🏜️ Desert Sunset' },
-  { id: 'theme-oasis', name: '🌴 Oasis Emerald' },
-  { id: 'theme-amethyst', name: '👑 Royal Sultan' }
+  { id: 'theme-midnight', name: 'Midnight Tomb' },
+  { id: 'theme-desert', name: 'Desert Sunset' },
+  { id: 'theme-oasis', name: 'Oasis Emerald' },
+  { id: 'theme-amethyst', name: 'Royal Sultan' }
 ];
 let currentThemeIdx = 0;
 try {
@@ -112,7 +123,7 @@ function applyTheme(idx) {
   document.body.classList.add(theme.id);
   try { localStorage.setItem('jinn:theme', theme.id); } catch(e) {}
   const btn = document.getElementById('themeBtn');
-  if (btn) btn.textContent = theme.name;
+  if (btn) btn.innerHTML = `<img src="assets/icons/palette.svg" class="nav-icon" alt="" /> <span>${theme.name}</span>`;
 }
 applyTheme(currentThemeIdx);
 
@@ -188,7 +199,7 @@ function closeM(){md.classList.remove('on');}
 
 function navBtn(){
   const b=document.getElementById('loginBtn');
-  b.textContent=PR?'☥ '+PR.name.slice(0,12):'Login';
+  b.innerHTML=PR?`<img src="assets/icons/ankh.svg" class="nav-icon" alt="" /> <span>${esc(PR.name.slice(0,12))}</span>`:'Login';
   b.classList.toggle('gold',!!PR);
 }
 function afterAuth(){loadST();navBtn();closeM();if(S.scr==='intro')render();}
@@ -318,8 +329,7 @@ function render(){
     if(!musicPlaying) {
       bgm.play().then(() => {
         musicPlaying = true;
-        const btn = document.getElementById('musicBtn');
-        if (btn) btn.textContent = '🎵 Music: On';
+        updateMusicBtn();
       }).catch(() => {});
     }
     fx('wipe',()=>{S={scr:'ask',ans:[],rej:[],cur:null,ai:!!sample};go()});
@@ -356,7 +366,7 @@ function render(){
   
   on('#share',()=>{
     const t=`The Jinn unearthed ${S.cur.n} in ${S.ans.length} questions on jinn.lakshya.uk`;
-    navigator.clipboard&&navigator.clipboard.writeText(t).then(()=>$('#share').textContent='Copied ✓').catch(()=>{});
+    navigator.clipboard&&navigator.clipboard.writeText(t).then(()=>$('#share').innerHTML='Copied').catch(()=>{});
   });
 }
 
@@ -389,7 +399,7 @@ function fx(mode,cb){FX={mode,cb,t0:performance.now(),dur:{wipe:950,eye:1800,rai
 function frame(ts){requestAnimationFrame(frame);if(ts-last<33)return;last=ts;mx+=(tx-mx)*.12;my+=(ty-my)*.12;title();
  if(!FX){if(dirty){bx.clearRect(0,0,W,H);dirty=0}return}dirty=1;
  const p=(ts-FX.t0)/FX.dur;if(p>=1){const th=FX.then;FX=null;bx.clearRect(0,0,W,H);if(th)fx(th);return}
- const st=ts/150|0,B=[[],[],[],[],[],[]],put=(i,j,l,hh)=>{const r=(hh%1000)/1000;l*=.8+.4*r;if(l<.08)return;B[Math.min(5,l*6|0)].push(i*cs,j*ch,l>.8&&r>.88?'☥':(hh&1?'1':'0'))},hs=(i,j)=>((i*73856093)^(j*19349663)^(st*83492791))>>>0;
+ const st=ts/150|0,B=[[],[],[],[],[],[]],put=(i,j,l,hh)=>{const r=(hh%1000)/1000;l*=.8+.4*r;if(l<.08)return;B[Math.min(5,l*6|0)].push(i*cs,j*ch,l>.8&&r>.88?'*':(hh&1?'1':'0'))},hs=(i,j)=>((i*73856093)^(j*19349663)^(st*83492791))>>>0;
  let cov=0;
  if(FX.mode=='wipe'){cov=p<.5?p*2:(1-p)*2;if(p>=.5&&!FX.done){FX.done=1;FX.cb&&FX.cb();if(S.scr=='guess')FX.then='eye'}
   const R=cov*1.25;for(let j=0;j<gh;j++)for(let i=0;i<gw;i++){const d=Math.hypot((i/gw-.5)*1.7,j/gh-.5);if(d>R)continue;const e=Math.max(0,1-(R-d)*9);put(i,j,.3+.7*e,hs(i,j))}}
@@ -416,8 +426,7 @@ function enter(){
   // Auto-play the authentic Desert City track on user tap
   bgm.play().then(() => {
     musicPlaying = true;
-    const btn = document.getElementById('musicBtn');
-    if (btn) btn.textContent = '🎵 Music: On';
+    updateMusicBtn();
   }).catch(() => {});
   fx('wipe',()=>{op.remove();ot=null;});
 }

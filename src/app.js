@@ -308,18 +308,18 @@ function render(){
       <div><b>${ST.w}</b>guessed</div>
       <div><b>${ST.s}</b>stumped</div>
     </div>
-    <div><button class="big" id="start" style="width:100%">Wake the Jinn</button></div>
+    <div class="action-row"><button class="big primary-btn" id="start">Wake the Jinn</button></div>
     <p class="note">${sample?'The Jinn knows every soul on Earth':'Archive mode · 50 souls'}</p>`;
   }
   
   if(sc==='ask') {
     side=`${scr}
     <div class="ans">
-      ${OPT.map((o,i)=>`<button class="a${i}" data-a="${i}"><span>${o}</span><i>${i+1}</i></button>`).join('')}
+      ${OPT.map((o,i)=>`<button class="ans-card a${i}" data-a="${i}"><span class="gem-badge">${i+1}</span><span class="label">${o}</span></button>`).join('')}
     </div>
-    <div class="ft">
-      <button id="back" ${n?'':'disabled style="opacity:.3"'}>← Undo</button>
-      <button id="quit">Restart</button>
+    <div class="ft-bar">
+      <button id="back" class="subtle-btn" ${n?'':'disabled'}>Undo</button>
+      <button id="quit" class="subtle-btn danger">Restart</button>
     </div>
     ${S.note?`<p class="note">${esc(S.note)}</p>`:''}`;
   }
@@ -331,24 +331,24 @@ function render(){
   
   if(sc==='guess') {
     side=`${scr}${cart}
-    <div class="gap">
-      <button class="big" id="yes" style="flex:1">Yes, that is them</button>
-      <button class="big alt" id="no" style="flex:1">No, try again</button>
+    <div class="action-grid">
+      <button class="big primary-btn" id="yes">Yes, that is them</button>
+      <button class="big secondary-btn" id="no">No, try again</button>
     </div>`;
   }
   
   if(sc==='win') {
     side=`${scr}${cart}
     <p class="d" style="font-weight:700;color:var(--gold-glow)">Unearthed in ${n} questions.</p>
-    <div class="gap">
-      <button class="big" id="again" style="flex:1">Play again</button>
-      <button class="big alt" id="share" style="flex:1">Share result</button>
+    <div class="action-grid">
+      <button class="big primary-btn" id="again">Play again</button>
+      <button class="big secondary-btn" id="share">Share result</button>
     </div>`;
   }
   
   if(sc==='lose') {
     side=`${scr}<p class="d">Your soul lies beyond the tomb. The Jinn bows to your cunning.</p>
-    <div class="gap"><button class="big" id="again" style="width:100%">Play again</button></div>`;
+    <div class="action-row"><button class="big primary-btn" id="again">Play again</button></div>`;
   }
   
   h+=`<div class="stage">${mas}<div class="side">${side}</div></div>`;

@@ -166,7 +166,7 @@ function renderMascot(emotion = 'idle') {
           </filter>
         </defs>
         <!-- Sacred Geometry Platinum Ring -->
-        <circle cx="100" cy="115" r="88" stroke="url(#platinumMetallic)" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
+        <circle cx="100" cy="115" r="88" stroke="url(#platinumMetallic)" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6" class="illum-ring-outer"/>
         <circle cx="100" cy="115" r="72" fill="url(#illumGlow)" opacity="0.4"/>
         <!-- Great Obsidian Pyramid Base -->
         <polygon points="100,22 24,182 176,182" fill="url(#pyrGradGold)" stroke="url(#goldMetallic)" stroke-width="2.5"/>
@@ -179,9 +179,11 @@ function renderMascot(emotion = 'idle') {
         <!-- Eye of Providence -->
         <g class="genie-eyes" transform="translate(0, 4)">
           <path d="M78 64Q100 46 122 64Q100 82 78 64Z" fill="#08080c" stroke="url(#platinumMetallic)" stroke-width="2"/>
-          <circle cx="100" cy="64" r="8.5" fill="url(#goldMetallic)"/>
-          <ellipse cx="100" cy="64" rx="3.5" ry="7.5" fill="#000"/>
-          <circle cx="98" cy="62" r="1.8" fill="#fff"/>
+          <g id="illumEyePupil">
+            <circle cx="100" cy="64" r="8.5" fill="url(#goldMetallic)"/>
+            <ellipse cx="100" cy="64" rx="3.5" ry="7.5" fill="#000"/>
+            <circle cx="98" cy="62" r="1.8" fill="#fff"/>
+          </g>
         </g>
         <!-- Golden Meridian Compass Lines -->
         <line x1="100" y1="184" x2="100" y2="224" stroke="url(#goldMetallic)" stroke-width="2" opacity="0.8"/>
@@ -822,13 +824,36 @@ function resizeAscii() {
 resizeAscii();
 window.addEventListener('resize', resizeAscii);
 
-// Interactive Pupil Mouse / Pointer Tracking
+// Interactive Pupil Mouse / Pointer Tracking & Dynamic 3D Card Tilt
 window.addEventListener('pointermove', e => {
   tx = e.clientX / W - 0.5;
   ty = e.clientY / H - 0.5;
+
+  // Genie pupils tracking
   const pupilG = document.getElementById('geniePupils');
   if (pupilG) {
     pupilG.setAttribute('transform', `translate(${tx * 7}, ${ty * 3})`);
+  }
+
+  // Illuminati All-Seeing Eye pupil tracking
+  const illumPupil = document.getElementById('illumEyePupil');
+  if (illumPupil) {
+    illumPupil.setAttribute('transform', `translate(${tx * 6}, ${ty * 3.5})`);
+  }
+
+  // Atmospheric 3D Oracle Card Tilt
+  const card = document.getElementById('game-card');
+  if (card) {
+    const rotX = -ty * 7;
+    const rotY = tx * 7;
+    card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
+  }
+});
+
+window.addEventListener('pointerleave', () => {
+  const card = document.getElementById('game-card');
+  if (card) {
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
   }
 });
 

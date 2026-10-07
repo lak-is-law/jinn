@@ -345,11 +345,14 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 28px;
-  transition: border-color 0.3s ease;
+  transition: transform 0.15s ease-out, border-color 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform;
+  transform-style: preserve-3d;
 }
 
 .oracle-card:hover {
   border-color: var(--border-focus);
+  box-shadow: 0 36px 90px rgba(0, 0, 0, 0.8), 0 0 30px var(--accent-glow);
 }
 
 /* Status Progress Header */
@@ -460,6 +463,19 @@ body.theme-illuminati .lampsvg {
 body.theme-illuminati .mascot-svg {
   margin-bottom: 0;
   max-width: 240px;
+}
+
+.illum-ring-outer {
+  animation: illumRingRotate 60s linear infinite;
+  transform-origin: 100px 115px;
+}
+
+@keyframes illumRingRotate {
+  to { transform: rotate(360deg); }
+}
+
+#geniePupils, #illumEyePupil {
+  transition: transform 0.08s ease-out;
 }
 
 /* Smoke tail & puff animations */
@@ -692,19 +708,35 @@ body.theme-illuminati .mascot-svg {
   color: var(--text-main);
   cursor: pointer;
   text-align: left;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.answer-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
 }
 
 .answer-card:hover {
   background: var(--bg-surface-hover);
   border-color: var(--border-focus);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 16px var(--accent-glow);
+  transform: translateY(-3px) scale(1.015);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45), 0 0 20px var(--accent-glow);
+}
+
+.answer-card:hover::after {
+  opacity: 1;
 }
 
 .answer-card:active {
-  transform: translateY(1px);
+  transform: translateY(0px) scale(0.985);
 }
 
 .card-key {

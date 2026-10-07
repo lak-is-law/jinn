@@ -71,7 +71,7 @@ function prompt(){const n=S.ans.length;return SYS+'\n\nQ&A so far:\n'+(S.ans.map
 async function go(){
  if(S.ai){if(S.rej.length>=4){S.scr='lose'}else{S.scr='think';render();try{const r=await sample.json(prompt(),{modelTier:'quick',cache:false});
    if(r.type=='guess'&&r.name){S.cur={n:r.name,d:r.description||''};S.scr='guess';if(FX)FX.then='eye';else fx('eye')}else if(r.text){S.cur=r.text;S.scr='ask'}else throw 0}
-  catch(e){S={scr:'ask',ans:[],rej:[],cur:null,ai:false,note:'The sands are clouded. Playing from the archive.'};next()}}}
+  catch(e){console.error("AI error:", e);S={scr:'ask',ans:[],rej:[],cur:null,ai:false,note:'Connection hiccup. Retrying...'};next()}}}
  else next();
  if(S.scr==='lose'){ST.g++;ST.s++;save()}render()}
 window.claude&&claude.use('sample').then(x=>{sample=x;if(S.scr==='intro')render()}).catch(()=>{});

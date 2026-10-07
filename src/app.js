@@ -344,6 +344,7 @@ async function progressTurn() {
     if (data.type === 'guess' && data.name) {
       STATE.currentCandidate = { name: data.name, description: data.description || '' };
       STATE.screen = 'guess';
+      if (typeof triggerFx === 'function') triggerFx('eye');
     } else if (data.text) {
       STATE.currentQuestion = data.text;
       STATE.screen = 'ask';
@@ -358,6 +359,7 @@ async function progressTurn() {
       const match = STATIC_ARCHIVE.find(c => !STATE.rejected.includes(c.n)) || STATIC_ARCHIVE[0];
       STATE.currentCandidate = { name: match.n, description: match.d };
       STATE.screen = 'guess';
+      if (typeof triggerFx === 'function') triggerFx('eye');
     } else {
       const questions = [
         "Is your person alive today?",
@@ -794,6 +796,210 @@ if (op) {
   requestAnimationFrame(animateIntro);
 }
 
+// ==========================================================================
+// ASCII SCENE & SACRED EYE MIND-READING PORTAL ANIMATION
+// ==========================================================================
+const bg = document.getElementById('bg');
+const bx = bg ? bg.getContext('2d') : null;
+const sc = document.createElement('canvas');
+const sx = sc.getContext('2d', { willReadFrequently: true });
+let W = window.innerWidth, H = window.innerHeight;
+let cs = 14, ch = 18, gw = 80, gh = 50;
+let mx = 0, my = 0, tx = 0, ty = 0, lastFrameTime = 0;
+const ASCII_COL = ['#3a0d08', '#6b160c', '#9c2412', '#c4521a', '#e2b54a', '#fff1c0'];
+
+function resizeAscii() {
+  if (!bg) return;
+  W = bg.width = window.innerWidth;
+  H = bg.height = window.innerHeight;
+  cs = Math.max(11, Math.round(W / 115));
+  ch = cs * 1.3;
+  gw = Math.ceil(W / cs);
+  gh = Math.ceil(H / ch);
+  sc.width = gw;
+  sc.height = gh;
+}
+resizeAscii();
+window.addEventListener('resize', resizeAscii);
+
+// Interactive Pupil Mouse / Pointer Tracking
+window.addEventListener('pointermove', e => {
+  tx = e.clientX / W - 0.5;
+  ty = e.clientY / H - 0.5;
+  const pupilG = document.getElementById('geniePupils');
+  if (pupilG) {
+    pupilG.setAttribute('transform', `translate(${tx * 7}, ${ty * 3})`);
+  }
+});
+
+function drawScene(t) {
+  const w = gw, h = gh, cx = w / 2, hz = h * 0.74;
+  const R = h * 0.3 + Math.sin(t / 1400) * 1.2;
+  const ey = hz - h * 0.3;
+
+  sx.fillStyle = '#000';
+  sx.fillRect(0, 0, w, h);
+  let g = sx.createLinearGradient(0, 0, 0, hz);
+  g.addColorStop(0, '#050505');
+  g.addColorStop(1, '#606060');
+  sx.fillStyle = g;
+  sx.fillRect(0, 0, w, hz);
+
+  // Outer Iris Aura
+  sx.fillStyle = '#8c8c8c';
+  sx.beginPath();
+  sx.arc(cx, ey, R, 0, 7);
+  sx.fill();
+
+  // Eye of Providence Contour
+  sx.fillStyle = '#000';
+  sx.beginPath();
+  sx.moveTo(cx - R * 0.92, ey);
+  sx.quadraticCurveTo(cx, ey - R * 0.95, cx + R * 0.92, ey);
+  sx.quadraticCurveTo(cx, ey + R * 0.95, cx - R * 0.92, ey);
+  sx.fill();
+
+  sx.strokeStyle = '#fff';
+  sx.lineWidth = 1.3;
+  sx.stroke();
+  sx.beginPath();
+  sx.moveTo(cx - R * 0.8, ey - R * 0.45);
+  sx.quadraticCurveTo(cx, ey - R * 1.2, cx + R * 0.8, ey - R * 0.45);
+  sx.stroke();
+
+  sx.beginPath();
+  sx.moveTo(cx - R * 0.1, ey + R * 0.55);
+  sx.lineTo(cx - R * 0.2, ey + R * 1.1);
+  sx.moveTo(cx - R * 0.55, ey + R * 0.3);
+  sx.quadraticCurveTo(cx - R * 0.9, ey + R * 0.6, cx - R * 0.7, ey + R * 1.05);
+  sx.stroke();
+
+  // Looking Pupil
+  const ix = cx + mx * R * 0.35, iy = ey + my * R * 0.18;
+  sx.fillStyle = '#fff';
+  sx.beginPath();
+  sx.arc(ix, iy, R * 0.3, 0, 7);
+  sx.fill();
+  sx.fillStyle = '#000';
+  sx.beginPath();
+  sx.ellipse(ix, iy, R * 0.05, R * 0.25, 0, 0, 7);
+  sx.fill();
+
+  // Mountain / Sand Dunes Silhouette
+  sx.fillStyle = '#000';
+  [[-0.02, 0.36, 0.17, 0.24], [0.46, 0.74, 0.6, 0.1], [0.6, 1.02, 0.82, 0.2]].forEach(p => {
+    sx.beginPath();
+    sx.moveTo(w * p[0], hz + 2);
+    sx.lineTo(w * p[2], hz - h * p[3]);
+    sx.lineTo(w * p[1], hz + 2);
+    sx.fill();
+  });
+
+  sx.fillStyle = '#1a1a1a';
+  sx.fillRect(0, hz, w, h - hz);
+  sx.strokeStyle = '#4a4a4a';
+  sx.lineWidth = 1;
+  for (let k = 1; k < 4; k++) {
+    sx.beginPath();
+    for (let x = 0; x <= w; x += 2) {
+      const y = hz + k * h * 0.07 + Math.sin(x * 0.12 + k + t / 2500) * 1.4;
+      x ? sx.lineTo(x, y) : sx.moveTo(x, y);
+    }
+    sx.stroke();
+  }
+}
+
+let FX = null, dirty = 0;
+
+function triggerFx(mode, cb) {
+  const durMap = { wipe: 950, eye: 1900, rain: 2300 };
+  FX = { mode, cb, t0: performance.now(), dur: durMap[mode] || 1500, done: 0 };
+}
+
+function fxFrame(ts) {
+  requestAnimationFrame(fxFrame);
+  if (ts - lastFrameTime < 30) return;
+  lastFrameTime = ts;
+  mx += (tx - mx) * 0.12;
+  my += (ty - my) * 0.12;
+
+  if (!bx) return;
+  if (!FX) {
+    if (dirty) {
+      bx.clearRect(0, 0, W, H);
+      dirty = 0;
+    }
+    return;
+  }
+  dirty = 1;
+
+  const p = (ts - FX.t0) / FX.dur;
+  if (p >= 1) {
+    const th = FX.then;
+    FX = null;
+    bx.clearRect(0, 0, W, H);
+    if (th) triggerFx(th);
+    return;
+  }
+
+  const st = (ts / 150) | 0;
+  const B = [[], [], [], [], [], []];
+  const put = (i, j, l, hh) => {
+    const r = (hh % 1000) / 1000;
+    l *= 0.8 + 0.4 * r;
+    if (l < 0.08) return;
+    B[Math.min(5, (l * 6) | 0)].push(i * cs, j * ch, l > 0.8 && r > 0.88 ? '*' : (hh & 1 ? '1' : '0'));
+  };
+  const hs = (i, j) => ((i * 73856093) ^ (j * 19349663) ^ (st * 83492791)) >>> 0;
+  let cov = 0;
+
+  if (FX.mode === 'wipe') {
+    cov = p < 0.5 ? p * 2 : (1 - p) * 2;
+    if (p >= 0.5 && !FX.done) {
+      FX.done = 1;
+      FX.cb && FX.cb();
+      if (STATE.screen === 'guess') FX.then = 'eye';
+    }
+    const R = cov * 1.25;
+    for (let j = 0; j < gh; j++) {
+      for (let i = 0; i < gw; i++) {
+        const d = Math.hypot((i / gw - 0.5) * 1.7, j / gh - 0.5);
+        if (d > R) continue;
+        const e = Math.max(0, 1 - (R - d) * 9);
+        put(i, j, 0.3 + 0.7 * e, hs(i, j));
+      }
+    }
+  }
+
+  if (FX.mode === 'eye') {
+    cov = Math.sin(p * Math.PI);
+    drawScene(ts);
+    const d = sx.getImageData(0, 0, gw, gh).data;
+    for (let j = 0; j < gh; j++) {
+      for (let i = 0; i < gw; i++) {
+        put(i, j, (d[(j * gw + i) * 4] / 255) * Math.min(1, cov * 1.6), hs(i, j));
+      }
+    }
+    cov *= 0.9;
+  }
+
+  bx.clearRect(0, 0, W, H);
+  bx.fillStyle = `rgba(6, 3, 2, ${Math.min(0.94, cov * 1.5)})`;
+  bx.fillRect(0, 0, W, H);
+  bx.font = `${cs}px "Courier New", monospace`;
+  bx.textBaseline = 'top';
+  B.forEach((a, b) => {
+    bx.fillStyle = ASCII_COL[b];
+    for (let k = 0; k < a.length; k += 3) {
+      bx.fillText(a[k + 2], a[k], a[k + 1]);
+    }
+  });
+}
+
+if (bg) {
+  requestAnimationFrame(fxFrame);
+}
+
 // User Enters via Tap
 function enterApp() {
   if (!op || op.classList.contains('out')) return;
@@ -802,10 +1008,10 @@ function enterApp() {
   if (!isMusicActive) {
     toggleMusic();
   }
-  setTimeout(() => {
+  triggerFx('wipe', () => {
     if (op && op.parentNode) op.remove();
     ot = null;
-  }, 900);
+  });
 }
 
 if (op) {

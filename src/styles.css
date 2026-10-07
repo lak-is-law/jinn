@@ -628,11 +628,20 @@ body.theme-illuminati .mascot-svg {
   50% { opacity: 0.35; transform: scale(0.97); box-shadow: 0 0 0 rgba(226, 181, 74, 0); }
 }
 
-/* Ambient canvas background behind app */
+/* Ambient canvas background & ASCII Eye Portal Canvas */
 #bg-canvas {
   position: fixed;
   inset: 0;
   z-index: 0;
+  pointer-events: none;
+}
+
+#bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 45;
   pointer-events: none;
 }
 

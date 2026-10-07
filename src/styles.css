@@ -11,6 +11,47 @@
   box-sizing: border-box;
 }
 
+/* THEMES */
+/* 1. Midnight Tomb (Default) */
+body.theme-midnight {
+  --bg-dark: #08070d;
+  --bg-card: rgba(18, 15, 28, 0.75);
+  --border-gold: rgba(226, 181, 74, 0.35);
+  --gold-glow: #e2b54a;
+  --gold-gradient: linear-gradient(135deg, #f2c860, #b8892a);
+  --parchment: #f0e6cf;
+}
+
+/* 2. Desert Sunset (Warm Arabian Amber) */
+body.theme-desert {
+  --bg-dark: #1a0b06;
+  --bg-card: rgba(38, 18, 12, 0.78);
+  --border-gold: rgba(255, 140, 66, 0.4);
+  --gold-glow: #ff9f1c;
+  --gold-gradient: linear-gradient(135deg, #ff9f1c, #d94e1e);
+  --parchment: #ffeacc;
+}
+
+/* 3. Oasis Emerald (Deep Nile Teal & Jade) */
+body.theme-oasis {
+  --bg-dark: #041210;
+  --bg-card: rgba(8, 30, 26, 0.78);
+  --border-gold: rgba(46, 196, 182, 0.35);
+  --gold-glow: #2ec4b6;
+  --gold-gradient: linear-gradient(135deg, #2ec4b6, #0f766e);
+  --parchment: #e0fbf7;
+}
+
+/* 4. Royal Amethyst (Sultan Velvet Purple) */
+body.theme-amethyst {
+  --bg-dark: #0d0614;
+  --bg-card: rgba(28, 14, 42, 0.78);
+  --border-gold: rgba(200, 140, 240, 0.35);
+  --gold-glow: #c77dff;
+  --gold-gradient: linear-gradient(135deg, #c77dff, #7b2cbf);
+  --parchment: #f4e8fc;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
@@ -20,6 +61,7 @@ html, body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Cinzel", Georgia, serif;
   overflow-x: hidden;
   user-select: none;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 #sky { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.6; }
@@ -37,7 +79,7 @@ main {
   align-items: center;
   justify-content: center;
   padding: 24px 20px;
-  gap: 20px;
+  gap: 18px;
 }
 
 /* Nav */
@@ -46,26 +88,29 @@ main {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  flex-wrap: wrap;
 }
 .nav button {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(240, 230, 207, 0.7);
+  color: var(--parchment);
+  opacity: 0.75;
   background: rgba(25, 20, 38, 0.6);
-  border: 1px solid rgba(226, 181, 74, 0.25);
+  border: 1px solid var(--border-gold);
   padding: 8px 16px;
   border-radius: 20px;
   backdrop-filter: blur(8px);
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.nav button:hover, .nav .gold {
+.nav button:hover, .nav .gold, .nav.active {
+  opacity: 1;
   color: #100a04;
   background: var(--gold-glow);
   border-color: var(--gold-glow);
-  box-shadow: 0 0 14px rgba(226, 181, 74, 0.4);
+  box-shadow: 0 0 14px var(--border-gold);
 }
 
 /* The Core Game Card */
@@ -81,6 +126,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  transition: all 0.3s ease;
 }
 
 /* Header */
@@ -88,7 +134,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(226, 181, 74, 0.15);
+  border-bottom: 1px solid var(--border-gold);
   padding-bottom: 20px;
 }
 .hero { width: 120px; flex: none; }
@@ -180,7 +226,7 @@ main {
   justify-content: space-between;
   padding: 16px 20px;
   background: rgba(26, 21, 40, 0.7);
-  border: 1px solid rgba(226, 181, 74, 0.25);
+  border: 1px solid var(--border-gold);
   border-radius: 12px;
   font-size: 14px;
   font-weight: 600;
@@ -216,7 +262,7 @@ main {
   background: rgba(40, 32, 60, 0.9);
   border-color: var(--gold-glow);
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4), 0 0 12px rgba(226, 181, 74, 0.2);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4), 0 0 12px var(--border-gold);
 }
 .ans button:active {
   transform: translateY(1px);
@@ -255,7 +301,7 @@ main {
 }
 .big.alt:hover {
   border-color: var(--gold-glow);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 15px rgba(226, 181, 74, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 15px var(--border-gold);
 }
 
 .gap { display: flex; gap: 14px; flex-wrap: wrap; }
@@ -269,7 +315,8 @@ main {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.1em;
-  color: rgba(240, 230, 207, 0.6);
+  color: var(--parchment);
+  opacity: 0.6;
   background: none;
   border: none;
   cursor: pointer;
@@ -278,6 +325,7 @@ main {
   transition: all 0.2s;
 }
 .ft button:hover {
+  opacity: 1;
   color: var(--gold-glow);
   background: rgba(226, 181, 74, 0.08);
 }
@@ -289,7 +337,7 @@ main {
   border: 2px solid var(--gold-glow);
   border-radius: 40px;
   background: radial-gradient(circle, rgba(32, 24, 52, 0.9) 0%, rgba(14, 10, 24, 0.95) 100%);
-  box-shadow: 0 0 35px rgba(226, 181, 74, 0.3);
+  box-shadow: 0 0 35px var(--border-gold);
 }
 .name {
   font: 700 clamp(22px, 4vw, 34px)/1.2 "Cinzel", Georgia, serif;
@@ -298,7 +346,8 @@ main {
 .d {
   margin-top: 8px;
   font-size: 14px;
-  color: rgba(240, 230, 207, 0.75);
+  color: var(--parchment);
+  opacity: 0.75;
 }
 
 /* Pyramid Progress */
@@ -314,7 +363,7 @@ main {
 .pr span.on {
   background: var(--gold-gradient);
   border-color: var(--gold-glow);
-  box-shadow: 0 0 8px rgba(226, 181, 74, 0.6);
+  box-shadow: 0 0 8px var(--border-gold);
 }
 
 /* Stats */
@@ -327,7 +376,8 @@ main {
   font-size: 10px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: rgba(240, 230, 207, 0.6);
+  color: var(--parchment);
+  opacity: 0.6;
 }
 .stats b {
   display: block;
@@ -339,7 +389,8 @@ main {
   font-size: 11px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: rgba(240, 230, 207, 0.5);
+  color: var(--parchment);
+  opacity: 0.5;
 }
 
 /* Thinking Indicator */
@@ -393,7 +444,8 @@ main {
   letter-spacing: 0.35em;
   text-transform: uppercase;
   font-size: clamp(10px, 1.5vw, 13px);
-  color: rgba(240, 230, 207, 0.7);
+  color: var(--parchment);
+  opacity: 0.7;
   text-align: center;
 }
 .tap {

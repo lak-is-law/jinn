@@ -69,6 +69,53 @@ function M(m){
 const OPT=["Yes","Probably","Probably not","No"],LK=[[1,.65,.3,.05],[.05,.3,.65,1]];
 let sample=null;
 
+/* Background Arabian Music Player using Desert City by Kevin MacLeod */
+const bgm = new Audio('/audio/arabian-nights.mp3');
+bgm.loop = true;
+bgm.volume = 0.35;
+let musicPlaying = false;
+
+function toggleMusic() {
+  const btn = document.getElementById('musicBtn');
+  if (musicPlaying) {
+    bgm.pause();
+    musicPlaying = false;
+    if (btn) btn.textContent = '🔇 Music: Off';
+  } else {
+    bgm.play().then(() => {
+      musicPlaying = true;
+      if (btn) btn.textContent = '🎵 Music: On';
+    }).catch(e => console.log('Autoplay restriction:', e));
+  }
+}
+
+/* Theme Switcher */
+const THEMES = [
+  { id: 'theme-midnight', name: '🌙 Midnight Tomb' },
+  { id: 'theme-desert', name: '🏜️ Desert Sunset' },
+  { id: 'theme-oasis', name: '🌴 Oasis Emerald' },
+  { id: 'theme-amethyst', name: '👑 Royal Sultan' }
+];
+let currentThemeIdx = 0;
+try {
+  const saved = localStorage.getItem('jinn:theme');
+  if (saved) {
+    const idx = THEMES.findIndex(t => t.id === saved);
+    if (idx !== -1) currentThemeIdx = idx;
+  }
+} catch(e) {}
+
+function applyTheme(idx) {
+  currentThemeIdx = (idx + THEMES.length) % THEMES.length;
+  const theme = THEMES[currentThemeIdx];
+  THEMES.forEach(t => document.body.classList.remove(t.id));
+  document.body.classList.add(theme.id);
+  try { localStorage.setItem('jinn:theme', theme.id); } catch(e) {}
+  const btn = document.getElementById('themeBtn');
+  if (btn) btn.textContent = theme.name;
+}
+applyTheme(currentThemeIdx);
+
 const apiShim={
   json: async () => {
     const r = await fetch('/api/jinn', {
@@ -163,6 +210,8 @@ addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
 document.querySelector('.nav').onclick=e=>{
   const k=e.target.dataset.n;
   if(!k)return;
+  if(k==='music') toggleMusic();
+  if(k==='theme') applyTheme(currentThemeIdx + 1);
   if(k==='home'){if(FX||S.scr==='intro'||S.scr==='think')return;fx('wipe',()=>{S={scr:'intro',ans:[],rej:[],cur:null};render()})}
   if(k==='how')modal('<h3>How to play</h3><p>Think of any famous or historic person. The Jinn asks up to 20 questions to deduce who you have in mind.</p><p>Answer truthfully: Yes, Probably, Probably not, or No. Keys 1 to 4 work as shortcuts.</p><p>If a guess is wrong, tell the Jinn and he will try again.</p>');
   if(k==='stats')statsView();
@@ -264,7 +313,17 @@ function render(){
   }
   
   const on=(s,f)=>{const e=$(s);if(e)e.onclick=f};
-  on('#start',()=>fx('wipe',()=>{S={scr:'ask',ans:[],rej:[],cur:null,ai:!!sample};go()}));
+  on('#start',()=> {
+    // Start authentic background music if not already playing
+    if(!musicPlaying) {
+      bgm.play().then(() => {
+        musicPlaying = true;
+        const btn = document.getElementById('musicBtn');
+        if (btn) btn.textContent = '🎵 Music: On';
+      }).catch(() => {});
+    }
+    fx('wipe',()=>{S={scr:'ask',ans:[],rej:[],cur:null,ai:!!sample};go()});
+  });
   
   document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{
     if(FX)return;
@@ -354,6 +413,12 @@ document.getElementById('om').innerHTML=M('intro');
 function enter(){
   if(op.classList.contains('out'))return;
   op.classList.add('out');
+  // Auto-play the authentic Desert City track on user tap
+  bgm.play().then(() => {
+    musicPlaying = true;
+    const btn = document.getElementById('musicBtn');
+    if (btn) btn.textContent = '🎵 Music: On';
+  }).catch(() => {});
   fx('wipe',()=>{op.remove();ot=null;});
 }
 op.onclick=enter;

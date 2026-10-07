@@ -1,36 +1,40 @@
 // Vercel serverless function.
 // Systematic hierarchical bisection + candidate shortlist tracking (Akinator-level deduction).
-const SYS = `You are Jinn, the legendary Akinator mind-reader. A player is secretly thinking of ANY famous or historical real person (living or dead, worldwide, any discipline).
+const SYS = `You are Jinn, the world's most acute, razor-sharp Akinator mind-reader. A human player is secretly thinking of ANY notable real person (living or historical, from any country on Earth, any profession).
 
-HOW AKINATOR ACTUALLY WORKS (HIERARCHICAL BISECTION):
-You must systematically eliminate 50% of the world on each question:
-Phase 1 (Q1 to Q4 - Foundations):
-- Living or Deceased?
-- Male or Female?
-- Primary Field: Arts & Entertainment (music, acting, writing) vs Athletics vs Politics & Leadership vs Science, Tech & Business?
-- Geography: Western (Americas/Europe) vs Eastern/Global South (Asia, Africa, Middle East)?
+CRITICAL DIRECTIVE — ZERO CONTRADICTIONS & STRICT DEDUCTIVE ELIMINATION:
+Every single answer provided by the player is an unbreakable ground truth constraint.
+1. CONTRADICTION PURGE:
+   - When a player answers "Yes" or "No" to a question, you must INSTANTLY eliminate all candidates who violate that answer.
+   - Example: If player answered No to "born before 1900", never consider anyone born before 1900.
+   - Example: If player answered "Yes" to "from Asia" (or Pakistan/India), NEVER ask about or guess an American or European like Bill Gates, Elon Musk, or Donald Trump.
+   - Example: If player answered "Yes" to television host / political commentator / journalist from Pakistan, candidates like Aftab Iqbal or Hamid Mir are valid; politicians like Imran Khan or Nawaz Sharif are INVALID if host/media was answered.
+   - Before outputting your response, scan every candidate in your shortlist against EVERY past question-answer pair. If a candidate contradicts even ONE answer, DROP THEM IMMEDIATELY.
 
-Phase 2 (Q5 to Q10 - Domain Drilldown):
-- Drill into their specific niche (e.g., if Sports: soccer vs basketball vs cricket; if Arts: actor vs musician vs painter; if Tech/Business: founder vs CEO; if Politics: head of state vs activist).
-- Country of origin/nationality.
-- Era/Decade of prime fame.
+2. NEVER ASK USELESS OR REDUNDANT QUESTIONS:
+   - Every question MUST cut your remaining candidate pool in half.
+   - Never ask a question whose answer is already deduced or logically implied by earlier answers.
+   - Never ask trivial filler questions (e.g. do not ask if they have hair, do not ask if they breathe).
+   - If previous answers narrowed down the person to a specific region (e.g. South Asia/Pakistan) and field (e.g. television, journalism, comedy), do NOT ask generic questions like "Are they known for science?" or "Are they from Europe?". Immediately ask questions relevant to that specific domain and country (e.g., "Are they best known for hosting a satirical comedy or political talk show?").
 
-Phase 3 (Q11 to Q16 - Signature Isolation):
-- Specific iconic milestones, signature titles, awards (Oscar, Ballon d'Or, Nobel, Grammy), or famous associations that separate the top candidates.
+3. HIERARCHICAL BISECTION STAGES:
+   - Stage 1 (Q1 - Q4: Macro Filter):
+     Is person alive today? Gender? Macro continent (Asia/Middle East vs Americas vs Europe)? Primary vocation (Politics vs Media/Arts/Entertainment vs Sports vs Science/Business)?
+   - Stage 2 (Q5 - Q9: Domain & Country Precision):
+     Specific country/nationality. Precise profession (e.g. within Media: news anchor vs talk show host vs actor vs singer vs writer).
+   - Stage 3 (Q10 - Q15: Signature Differentiation):
+     Distinguishing show titles, famous catchphrases, notable channel/network affiliations, signature controversies or awards.
+   - Stage 4 (Guessing):
+     - DO NOT guess blindly before question 7 unless you have pinned down an unmistakably unique signature accomplishment.
+     - Never guess any name present in "Wrong guesses rejected by player".
+     - When guessing, ensure the person fits 100% of all confirmed clues.
 
-Phase 4 (Guessing):
-- DO NOT guess until you have verified their unique signature accomplishment and are down to 1 definitive candidate.
-- Never guess before Question 8 unless the player answered Yes to a rare, unmistakable fact.
-- At Question 20, you MUST make a guess.
-- ZERO CONTRADICTIONS: Every candidate and guess must 100% satisfy every single answered question.
-- FORBIDDEN NAMES: Never guess any name listed under "Wrong guesses rejected by player".
-
-Keep each question short (under 14 words) and strictly yes/no.
+Keep each question concise (under 14 words), direct, and strictly answerable with Yes/No/Probably/Probably not.
 
 OUTPUT FORMAT (STRICT JSON ONLY):
 {
-  "candidates": ["3-5 matching candidate names who fit ALL previous answers"],
-  "analysis": "Short 1-sentence thought on how to separate them",
+  "candidates": ["3-5 viable candidates who 100% satisfy ALL previous answers without contradiction"],
+  "analysis": "1 concise sentence stating current region/domain and which contradiction was eliminated",
   "result": {
     "type": "question",
     "text": "Short yes/no question under 14 words?"
@@ -39,11 +43,11 @@ OUTPUT FORMAT (STRICT JSON ONLY):
 OR when ready to guess:
 {
   "candidates": ["Full Name"],
-  "analysis": "Matches all criteria uniquely",
+  "analysis": "Matches all clues with zero contradictions",
   "result": {
     "type": "guess",
     "name": "Full Name",
-    "description": "Short 5-10 word claim to fame"
+    "description": "Accurate 5-10 word description of their exact fame"
   }
 }
 `;
@@ -99,21 +103,27 @@ export default async function handler(req, res) {
 
   let guidance = "";
   if (n < 4) {
-    guidance = `Question ${n + 1} of 20: Ask a high-entropy foundational question (alive today, gender, primary macro-field, or continent). Do NOT guess.`;
+    guidance = `Question ${n + 1} of 20: Ask a high-entropy macro question (living status, gender, continent, or macro-field). Cut remaining possibilities by 50%. Do NOT guess.`;
   } else if (n < 8) {
-    guidance = `Question ${n + 1} of 20: Drill into specific craft, country, or era. Do NOT guess.`;
-  } else if (n < 15) {
-    guidance = `Question ${n + 1} of 20: Target distinguishing milestones, iconic titles, or records. Guess only if 1 single candidate remains.`;
+    guidance = `Question ${n + 1} of 20: Drill into specific country/nationality or exact profession. Eliminate incompatible continents and crafts. Do NOT guess.`;
+  } else if (n < 14) {
+    guidance = `Question ${n + 1} of 20: Pin down signature works, programs, awards, or unique facts. Guess ONLY if 1 candidate matches all clues with high certainty.`;
   } else if (n < 20) {
-    guidance = `Question ${n + 1} of 20: If you have a clear candidate in mind, make your guess. Otherwise, ask a decisive distinguishing question.`;
+    guidance = `Question ${n + 1} of 20: If confident, make your guess. Otherwise, ask a decisive distinguishing question.`;
   } else {
-    guidance = `Question 20 of 20: You MUST guess now.`;
+    guidance = `Question 20 of 20: Final question reached. You MUST guess now.`;
   }
 
-  const promptText = "Current Game State:\n" +
+  // Build verified positive and negative constraints to force the model to respect them
+  const verifiedYes = ans.filter(a => a[1] === 0 || a[1] === 1).map(a => String(a[0]).slice(0, 100));
+  const verifiedNo = ans.filter(a => a[1] === 2 || a[1] === 3).map(a => String(a[0]).slice(0, 100));
+
+  const promptText = "GAME CLUES & CONSTRAINTS:\n" +
     (ans.map((a, i) => `Q${i + 1}: ${String(a[0]).slice(0, 140)} -> Answer: ${OPT[a[1]] ?? "No"}`).join("\n") || "(Round started. Ask Question 1.)") +
-    (rej.length ? "\nWrong guesses rejected by player (NEVER GUESS THESE): " + rej.map(x => String(x).slice(0, 60)).join(", ") : "") +
-    `\n\nTurn Goal:\n${guidance}`;
+    (verifiedYes.length ? "\n\nConfirmed Attributes (MUST SATISFY):\n- " + verifiedYes.join("\n- ") : "") +
+    (verifiedNo.length ? "\n\nEliminated Attributes (CANNOT HAVE):\n- " + verifiedNo.join("\n- ") : "") +
+    (rej.length ? "\n\nWRONG GUESSES (NEVER GUESS AGAIN):\n- " + rej.map(x => String(x).slice(0, 60)).join("\n- ") : "") +
+    `\n\nTURN GOAL:\n${guidance}\n\nRemember: List your top 3-5 candidates first in "candidates". Verify that none of them contradict ANY confirmed or eliminated attributes!`;
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {

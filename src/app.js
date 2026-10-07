@@ -51,6 +51,39 @@ Ada Lovelace|First computer programmer|SEO`.split('\n').map(l=>{const[n,d,t]=l.s
 
 let EYE;
 function M(m){
+  if (document.body.classList.contains('theme-illuminati')) {
+    // Occult Illuminati Pyramid with the All-Seeing Eye of Providence
+    const mo={win:'#00ff9d',lose:'#ff3366',guess:'#00ff9d'}[m]||'#00ff9d';
+    return `<svg class="orb orb-illuminati" viewBox="0 0 200 250" style="overflow:visible"><defs>
+      <linearGradient id="illGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#052e16"/><stop offset="1" stop-color="#02130b"/></linearGradient>
+      <linearGradient id="pyrCap" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00ff9d"/><stop offset="1" stop-color="#059669"/></linearGradient>
+      <radialGradient id="eyeGlow"><stop offset="0" stop-color="#00ff9d" stop-opacity=".7"/><stop offset="1" stop-color="#00ff9d" stop-opacity="0"/></radialGradient>
+      <filter id="illGlow"><feGaussianBlur stdDeviation="4"/><feComposite in="SourceGraphic"/></filter>
+    </defs>
+    <!-- Sacred Geometry Halo -->
+    <circle cx="100" cy="115" r="92" fill="none" stroke="rgba(0,255,157,0.25)" stroke-width="1.5" stroke-dasharray="6,4"/>
+    <circle cx="100" cy="115" r="76" fill="url(#eyeGlow)" opacity=".45"/>
+    <polygon points="100,20 20,185 180,185" fill="none" stroke="rgba(0,255,157,0.3)" stroke-width="1.5"/>
+    <!-- Great Pyramid Base & Layers -->
+    <polygon points="100,25 28,180 172,180" fill="url(#illGrad)" stroke="#00ff9d" stroke-width="2.5"/>
+    <!-- Masonry Brick Lines -->
+    <line x1="45" y1="150" x2="155" y2="150" stroke="rgba(0,255,157,0.35)" stroke-width="1.5"/>
+    <line x1="58" y1="125" x2="142" y2="125" stroke="rgba(0,255,157,0.35)" stroke-width="1.5"/>
+    <line x1="72" y1="100" x2="128" y2="100" stroke="rgba(0,255,157,0.35)" stroke-width="1.5"/>
+    <!-- Floating Capstone with The Eye of Providence -->
+    <polygon points="100,25 68,90 132,90" fill="#041a0f" stroke="#00ff9d" stroke-width="2.5" filter="url(#illGlow)"/>
+    <!-- Golden Occult Eye -->
+    <g class="eyes" transform="translate(0, 5)">
+      <path d="M78 68Q100 48 122 68Q100 88 78 68Z" fill="#02130b" stroke="#00ff9d" stroke-width="2"/>
+      <circle cx="100" cy="68" r="9" fill="url(#pyrCap)"/>
+      <ellipse cx="100" cy="68" rx="3.5" ry="8" fill="#000"/>
+      <circle cx="98" cy="66" r="2" fill="#fff"/>
+    </g>
+    <!-- Occult Runes / Compass rays -->
+    <path d="M100 185L100 230M28 180L10 215M172 180L190 215" stroke="rgba(0,255,157,0.4)" stroke-width="2"/>
+    <circle cx="100" cy="232" r="4" fill="${mo}"/>
+    </svg>`;
+  }
   const mo={win:'M80 90Q100 116 120 90Z',lose:'M84 99Q100 90 116 99',guess:'M80 90Q100 108 120 89'}[m]||'M82 93Q100 101 118 91';
   return `<svg class="orb" viewBox="0 0 200 250" style="overflow:visible"><defs><linearGradient id="sm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#27407a"/><stop offset="1" stop-color="#6f8fd0" stop-opacity=".9"/></linearGradient><radialGradient id="hd" cx=".4" cy=".3"><stop offset="0" stop-color="#8fb0d4"/><stop offset="1" stop-color="#3a527f"/></radialGradient><radialGradient id="au"><stop offset="0" stop-color="#1fa6a0" stop-opacity=".28"/><stop offset=".6" stop-color="#D9341C" stop-opacity=".12"/><stop offset="1" stop-opacity="0"/></radialGradient><filter id="sk" x="-40%" y="-10%" width="180%" height="130%"><feTurbulence type="fractalNoise" baseFrequency=".012 .03" numOctaves="2" seed="3"><animate attributeName="baseFrequency" dur="9s" values=".012 .03;.022 .05;.012 .03" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" scale="22"/><feGaussianBlur stdDeviation="2"/></filter><filter id="sk2"><feGaussianBlur stdDeviation="5"/></filter></defs>
 <circle cx="100" cy="95" r="95" fill="url(#au)"/><g filter="url(#sk)" class="tail"><path d="M68 148C52 182 76 202 92 222C100 234 94 246 100 254C106 246 100 234 108 222C124 202 148 182 132 148Z" fill="url(#sm)"/><path d="M72 150C60 180 80 200 100 214C112 222 104 240 112 252C88 246 84 224 78 206C72 190 70 168 72 150Z" fill="#4a64b0" opacity=".7" class="puff2"/></g><g class="smk" fill="#8aa6d8" filter="url(#sk2)"><circle cx="46" cy="150" r="14"/><circle cx="154" cy="146" r="12" style="animation-delay:1.3s"/><circle cx="100" cy="200" r="16" style="animation-delay:2.1s"/><circle cx="68" cy="218" r="12" style="animation-delay:.7s"/><circle cx="134" cy="220" r="13" style="animation-delay:2.8s"/></g>
@@ -103,6 +136,7 @@ function toggleMusic() {
 /* Theme Switcher */
 const THEMES = [
   { id: 'theme-midnight', name: 'Midnight Tomb' },
+  { id: 'theme-illuminati', name: 'Illuminati Order' },
   { id: 'theme-desert', name: 'Desert Sunset' },
   { id: 'theme-oasis', name: 'Oasis Emerald' },
   { id: 'theme-amethyst', name: 'Royal Sultan' }
@@ -124,6 +158,7 @@ function applyTheme(idx) {
   try { localStorage.setItem('jinn:theme', theme.id); } catch(e) {}
   const btn = document.getElementById('themeBtn');
   if (btn) btn.innerHTML = `<img src="assets/icons/palette.svg" class="nav-icon" alt="" /> <span>${theme.name}</span>`;
+  if (typeof render === 'function' && document.getElementById('card')?.innerHTML) render();
 }
 applyTheme(currentThemeIdx);
 
@@ -237,14 +272,23 @@ const SAY={
   win:'Another secret unearthed. None escape me.',
   lose:'Impossible… your soul lies beyond the tomb. You have stumped the Jinn!'
 };
+const SAY_ILLUMINATI={
+  intro:'The All-Seeing Eye awakens. Hold any human soul in your consciousness; our secret archives already know.',
+  think:'Accessing the classified dossier… scanning global records…',
+  guess:'The Order has intercepted your thoughts! The subject is revealed…',
+  win:'The Grand Architect never fails. Another soul catalogued.',
+  lose:'An anomaly in the archives… you have evaded the All-Seeing Eye!'
+};
 const LAMP='<svg class="lampsvg" viewBox="0 0 200 80"><path d="M30 40C30 66 70 76 100 76C130 76 170 66 170 40Z" fill="#c9922c"/><path d="M26 38H174" stroke="#f0c860" stroke-width="6" stroke-linecap="round"/><path d="M170 40C186 34 192 22 196 12C184 20 176 24 168 28Z" fill="#c9922c"/><path d="M30 42C10 40 6 24 18 18" stroke="#c9922c" stroke-width="6" fill="none"/><ellipse cx="100" cy="40" rx="30" ry="6" fill="#f0c860"/><path d="M70 60Q100 70 130 60" stroke="#8a5f1a" stroke-width="3" fill="none"/></svg>';
 
 function render(){
   EYE=M(S.scr);
   const sc=S.scr,intro=sc==='intro',n=S.ans.length,play=sc=='ask'||sc=='think';
   card.className='gm';
+  const isIllum = document.body.classList.contains('theme-illuminati');
+  const sayMap = isIllum ? SAY_ILLUMINATI : SAY;
   
-  let txt=sc==='ask'?(S.ai?S.cur:Q[S.cur]):(sc==='intro'&&PR?`Welcome back, ${PR.name}. Bind a soul in thought, and I shall unearth it.`:SAY[sc])||'';
+  let txt=sc==='ask'?(S.ai?S.cur:Q[S.cur]):(sc==='intro'&&PR?`Welcome back, ${PR.name}. Bind a soul in thought, and I shall unearth it.`:sayMap[sc])||'';
   const scr=`<div class="scroll" data-t="${esc(txt)}">${esc(txt)}</div>`;
   const mas=`<div class="mas">${sc==='ask'?EYE.replace('class="orb"','class="orb" id="orb"'):EYE}${LAMP}</div>`;
   const cart=`<div class="cart"><div class="name">${esc(S.cur&&S.cur.n||'')}</div></div><p class="d">${esc(S.cur&&S.cur.d||'')}</p>`;

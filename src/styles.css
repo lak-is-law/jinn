@@ -52,6 +52,32 @@ body.theme-amethyst {
   --parchment: #f4e8fc;
 }
 
+/* 5. Illuminati Order (All-Seeing Eye, Occult Crypt, Neon Matrix Crimson) */
+body.theme-illuminati {
+  --bg-dark: #050706;
+  --bg-card: rgba(8, 18, 12, 0.82);
+  --border-gold: rgba(0, 255, 157, 0.4);
+  --gold-glow: #00ff9d;
+  --gold-gradient: linear-gradient(135deg, #00ff9d, #059669);
+  --parchment: #e6fff4;
+  --dot: #00ff9d;
+}
+body.theme-illuminati .scroll {
+  background: linear-gradient(135deg, #0c2017 0%, #06150f 100%);
+  color: #00ff9d;
+  border: 1px solid rgba(0, 255, 157, 0.5);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 255, 157, 0.15);
+  text-shadow: 0 0 10px rgba(0, 255, 157, 0.6);
+}
+body.theme-illuminati .cart {
+  border-color: #00ff9d;
+  background: radial-gradient(circle, rgba(10, 30, 20, 0.95) 0%, rgba(4, 12, 8, 0.98) 100%);
+  box-shadow: 0 0 45px rgba(0, 255, 157, 0.35);
+}
+body.theme-illuminati #sky {
+  filter: hue-rotate(90deg) saturate(1.4) contrast(1.2);
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
@@ -184,6 +210,20 @@ main {
   filter: drop-shadow(0 0 24px rgba(31, 166, 160, 0.35));
   animation: float 4s ease-in-out infinite;
   transition: transform 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+}
+.orb-illuminati {
+  filter: drop-shadow(0 0 28px rgba(0, 255, 157, 0.5)) !important;
+  animation: illFloat 5s ease-in-out infinite !important;
+}
+@keyframes illFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
+}
+body.theme-illuminati .lampsvg {
+  display: none;
+}
+body.theme-illuminati .mas .orb {
+  margin-bottom: 0;
 }
 @keyframes float { 50% { transform: translateY(-8px); } }
 .orb.hit { animation: hitPulse 0.5s cubic-bezier(0.2, 1.4, 0.4, 1); }

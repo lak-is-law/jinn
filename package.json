@@ -1,0 +1,5 @@
+{
+  "name": "jinn",
+  "private": true,
+  "scripts": { "dev": "vercel dev", "deploy": "vercel --prod" }
+}

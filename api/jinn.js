@@ -1,28 +1,36 @@
 // Vercel serverless function.
-// Uses fast, resilient Gemini models with strict anti-premature guessing and Akinator-grade deduction.
-const SYS = `You are Jinn, the legendary Akinator-style mind-reading oracle. The player secretly thinks of ANY famous or historical real person (living or dead, from any era, field, country, or discipline).
+// Uses chain-of-thought candidate tracking so Jinn reasons methodically like real Akinator.
+const SYS = `You are Jinn, the master Akinator mind-reader. A player is secretly thinking of ANY famous or historical real person (living or dead, from any field, country, or era).
 
-THE GOLDEN RULE — DO NOT JUMP TO CONCLUSIONS PREMATURELY:
-Real Akinator never guesses after just 4-6 vague clues. Jumping to a guess too soon makes you look like a careless guesser rather than a true mind reader.
-1. NEVER guess before Question 8 under any circumstances. Even if you think you might know, you MUST ask another distinguishing question to confirm.
-2. Between Questions 8 and 13: Guess ONLY if you have verified at least one highly specific signature achievement/role that uniquely belongs to that one person in the world. If more than 1 plausible person could fit the criteria, ASK ANOTHER QUESTION.
-3. NEVER make a guess that contradicts ANY prior answer. (Example: If the player answered "Yes" to Asia, you can NEVER guess someone from Europe or the Americas).
-4. Between Questions 14 and 19: If you have a clear candidate with high probability, guess them.
-5. At Question 20: You have reached the maximum allowed questions and MUST make a guess.
-6. FORBIDDEN NAMES: Never guess any name listed in "Wrong guesses rejected by player". If a guess was rejected, immediately pivot using a distinguishing question for other possibilities.
+YOUR REASONING PROCESS:
+You MUST maintain internal candidate hypotheses on every single turn.
+1. "candidates": Identify the top 3 to 6 real people who STRICTLY match ALL previous answers. Never include anyone who contradicts even one answer (e.g. if alive today = No, never include living people; if Asia = Yes, never include Western figures).
+2. "analysis": Briefly state how you can distinguish between these candidates.
+3. "result":
+   - If 2 or more candidates remain: Choose the single best yes/no question that roughly splits the candidate list in half (50/50 bisection). Keep question under 14 words.
+   - If ONLY 1 clear candidate remains with >=90% certainty (or at question 20): Output a GUESS.
+   - Under Question 6: Always ask a question to narrow down unless the player has answered multiple hyper-specific milestone clues.
+   - FORBIDDEN NAMES: Never include or guess any name in "Wrong guesses rejected by player".
 
-QUESTION CRAFTING:
-- Questions 1-5 (Broad Bisection): High-entropy splits (alive today? gender? arts/entertainment vs science/politics/sports/business? continent/region? born before/after 1950?).
-- Questions 6-11 (Category & Specificity): Zero in on specific craft, subfield, nationality, era, or genre.
-- Questions 12+: Target unmistakable signature works, awards, records, or milestones.
-- Keep questions under 14 words, phrased strictly as yes/no questions.
-
-OUTPUT FORMAT (STRICT JSON ONLY, NO MARKDOWN, NO OTHER TEXT):
-For a question:
-{"type":"question","text":"Short yes/no question under 14 words?"}
-
-For a guess:
-{"type":"guess","name":"Full Name","description":"Brief 5-10 word claim to fame"}
+OUTPUT JSON SCHEMA:
+{
+  "candidates": ["Person A", "Person B", "Person C"],
+  "analysis": "Short 1-sentence thought on what separates them",
+  "result": {
+    "type": "question",
+    "text": "Short yes/no question under 14 words?"
+  }
+}
+OR when guessing:
+{
+  "candidates": ["Person A"],
+  "analysis": "Only Person A uniquely matches all clues",
+  "result": {
+    "type": "guess",
+    "name": "Full Name",
+    "description": "Short 5-10 word claim to fame"
+  }
+}
 `;
 
 const OPT = ["Yes", "Probably", "Probably not", "No"];
@@ -46,8 +54,8 @@ async function callGemini(model, promptText, apiKey) {
       systemInstruction: { parts: [{ text: SYS }] },
       generationConfig: {
         responseMimeType: "application/json",
-        temperature: 0.15,
-        maxOutputTokens: 500
+        temperature: 0.1,
+        maxOutputTokens: 600
       }
     })
   });
@@ -74,21 +82,11 @@ export default async function handler(req, res) {
   if (!Array.isArray(ans) || !Array.isArray(rej) || ans.length > 20 || rej.length > 8) return res.status(400).end();
   const n = ans.length;
 
-  let guidance = "";
-  if (n < 8) {
-    guidance = `You have only asked ${n} questions. DO NOT GUESS YET! Ask another smart yes/no question to bisect the search space.`;
-  } else if (n < 14) {
-    guidance = `Questions asked: ${n} of 20. Do NOT guess unless you have isolated a single specific individual beyond reasonable doubt. Otherwise, ask a decisive distinguishing question.`;
-  } else if (n < 20) {
-    guidance = `Questions asked: ${n} of 20. If you have a clear candidate in mind that matches all answers, make your GUESS. Otherwise, ask a question to confirm.`;
-  } else {
-    guidance = `Questions asked: 20 of 20. You MUST make your best GUESS now.`;
-  }
-
   const promptText = "Current Game State:\n" +
-    (ans.map((a, i) => `Q${i + 1}: ${String(a[0]).slice(0, 140)} -> Player's Answer: ${OPT[a[1]] ?? "No"}`).join("\n") || "(Game just started. Ask Question 1.)") +
-    (rej.length ? "\nWrong guesses rejected by player (NEVER GUESS THESE AGAIN): " + rej.map(x => String(x).slice(0, 60)).join(", ") : "") +
-    `\n\nInstruction for this turn:\n${guidance}`;
+    (ans.map((a, i) => `Q${i + 1}: ${String(a[0]).slice(0, 140)} -> Answer: ${OPT[a[1]] ?? "No"}`).join("\n") || "(Game just started. Ask Question 1 to bisect the search space.)") +
+    (rej.length ? "\nWrong guesses rejected by player (NEVER GUESS THESE): " + rej.map(x => String(x).slice(0, 60)).join(", ") : "") +
+    `\n\nTotal questions answered: ${n} of 20.` +
+    (n >= 20 ? " Maximum questions reached: You MUST output a guess now." : "");
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
@@ -98,13 +96,14 @@ export default async function handler(req, res) {
   for (const model of CANDIDATE_MODELS) {
     try {
       const parsed = await callGemini(model, promptText, apiKey);
-      if (parsed && (parsed.type === "question" || parsed.type === "guess")) {
-        // Enforce no early guess before Q8 unless 20 questions reached
-        if (n < 8 && parsed.type === "guess") {
-          // If model tries to guess prematurely anyway, force it to ask a question instead
+      // Support both new structured result and fallback flat result
+      const out = parsed?.result || (parsed?.type ? parsed : null);
+      if (out && (out.type === "question" || out.type === "guess")) {
+        // Guardrail: don't guess before Q5 unless max questions reached
+        if (n < 5 && out.type === "guess") {
           continue;
         }
-        return res.status(200).setHeader("content-type", "application/json").send(JSON.stringify(parsed));
+        return res.status(200).setHeader("content-type", "application/json").send(JSON.stringify(out));
       }
     } catch (e) {
       console.warn(e.message);

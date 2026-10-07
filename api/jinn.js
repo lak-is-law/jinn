@@ -11,26 +11,30 @@ Every single answer provided by the player is an unbreakable ground truth constr
    - Example: If player answered "Yes" to television host / political commentator / journalist from Pakistan, candidates like Aftab Iqbal or Hamid Mir are valid; politicians like Imran Khan or Nawaz Sharif are INVALID if host/media was answered.
    - Before outputting your response, scan every candidate in your shortlist against EVERY past question-answer pair. If a candidate contradicts even ONE answer, DROP THEM IMMEDIATELY.
 
-2. NEVER ASK USELESS OR REDUNDANT QUESTIONS:
-   - Every question MUST cut your remaining candidate pool in half.
+2. BROAD CATEGORY ELIMINATION (STRICT RULE — NEVER ASK ABOUT A SINGLE PERSON):
+   - QUESTIONS MUST ONLY TEST BROAD CATEGORIES OR MULTI-PERSON ATTRIBUTES:
+     * Nationality / specific country (e.g., "Are they from Pakistan?")
+     * Profession / medium (e.g., "Are they best known for television broadcasting or journalism?")
+     * Format / genre (e.g., "Do they host a political talk show or satirical comedy?")
+     * Demographics / era (e.g., "Were they born after 1970?")
+   - STRICT FORBIDDEN PATTERN: DO NOT ASK "Are they [Person Name]?" OR ASK ABOUT A SINGLE INDIVIDUAL IN A QUESTION!
+   - Asking about a single individual wastes a question. To guess an individual, you MUST output a "guess" object instead of a "question"!
+   - Every question must optimize information gain (entropy) and eliminate 50% of the remaining candidate space.
    - Never ask a question whose answer is already deduced or logically implied by earlier answers.
-   - Never ask trivial filler questions (e.g. do not ask if they have hair, do not ask if they breathe).
-   - If previous answers narrowed down the person to a specific region (e.g. South Asia/Pakistan) and field (e.g. television, journalism, comedy), do NOT ask generic questions like "Are they known for science?" or "Are they from Europe?". Immediately ask questions relevant to that specific domain and country (e.g., "Are they best known for hosting a satirical comedy or political talk show?").
+   - If previous answers narrowed down the person to a specific region (e.g. Pakistan) and field (e.g. television host/satirist), ask differentiating category traits (e.g. "Do they host a show featuring a panel of comedians?") or if confident, make a GUESS.
 
 3. HIERARCHICAL BISECTION STAGES:
-   - Stage 1 (Q1 - Q4: Macro Filter):
+   - Stage 1 (Q1 - Q4: Macro Demographics & Field):
      Is person alive today? Gender? Macro continent (Asia/Middle East vs Americas vs Europe)? Primary vocation (Politics vs Media/Arts/Entertainment vs Sports vs Science/Business)?
-   - Stage 2 (Q5 - Q9: Domain & Country Precision):
+   - Stage 2 (Q5 - Q9: Country & Domain Precision):
      Specific country/nationality. Precise profession (e.g. within Media: news anchor vs talk show host vs actor vs singer vs writer).
-   - Stage 3 (Q10 - Q15: Signature Differentiation):
-     Distinguishing show titles, famous catchphrases, notable channel/network affiliations, signature controversies or awards.
+   - Stage 3 (Q10 - Q15: Format & Distinguishing Category Attributes):
+     Distinguishing formats (e.g. satirical comedy vs serious news), major network types, era of peak fame.
    - Stage 4 (Guessing):
-     - DO NOT guess blindly before question 7 unless you have pinned down an unmistakably unique signature accomplishment.
+     - Guess as soon as 1 candidate satisfies all clues with high probability.
      - Never guess any name present in "Wrong guesses rejected by player".
      - When guessing, ensure the person fits 100% of all confirmed clues.
-
 Keep each question concise (under 14 words), direct, and strictly answerable with Yes/No/Probably/Probably not.
-
 OUTPUT FORMAT (STRICT JSON ONLY):
 {
   "candidates": ["3-5 viable candidates who 100% satisfy ALL previous answers without contradiction"],
@@ -103,15 +107,15 @@ export default async function handler(req, res) {
 
   let guidance = "";
   if (n < 4) {
-    guidance = `Question ${n + 1} of 20: Ask a high-entropy macro question (living status, gender, continent, or macro-field). Cut remaining possibilities by 50%. Do NOT guess.`;
+    guidance = `Question ${n + 1} of 20: Ask a high-entropy macro category question (living status, gender, continent, or macro-field). Eliminate 50% of the possibilities. Do NOT ask about a specific person. Do NOT guess.`;
   } else if (n < 8) {
-    guidance = `Question ${n + 1} of 20: Drill into specific country/nationality or exact profession. Eliminate incompatible continents and crafts. Do NOT guess.`;
-  } else if (n < 14) {
-    guidance = `Question ${n + 1} of 20: Pin down signature works, programs, awards, or unique facts. Guess ONLY if 1 candidate matches all clues with high certainty.`;
+    guidance = `Question ${n + 1} of 20: Bisect specific country/nationality or exact profession/domain. Eliminate incompatible fields and regions. Do NOT ask about a single individual by name. Do NOT guess.`;
+  } else if (n < 13) {
+    guidance = `Question ${n + 1} of 20: Ask distinguishing format, style, or genre attributes (e.g. comedic vs news journalism, television vs print/digital, group vs solo). Do NOT ask 'Are they [Name]?'. If you are confident in an individual, return type 'guess'.`;
   } else if (n < 20) {
-    guidance = `Question ${n + 1} of 20: If confident, make your guess. Otherwise, ask a decisive distinguishing question.`;
+    guidance = `Question ${n + 1} of 20: If confident, return type 'guess'. Otherwise, ask a decisive distinguishing category trait. Never name an individual in a question.`;
   } else {
-    guidance = `Question 20 of 20: Final question reached. You MUST guess now.`;
+    guidance = `Question 20 of 20: Maximum questions reached. You MUST return type 'guess' now with your most probable candidate.`;
   }
 
   // Build verified positive and negative constraints to force the model to respect them

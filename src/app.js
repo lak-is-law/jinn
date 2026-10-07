@@ -313,18 +313,28 @@ const LORE = {
   }
 };
 
-// API Deduction Engine Dispatcher
+// API Deduction Engine Dispatcher with strict AbortController timeout
 async function fetchDeduction() {
-  const response = await fetch('/api/jinn', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      ans: STATE.answers,
-      rej: STATE.rejected
-    })
-  });
-  if (!response.ok) throw new Error('API ' + response.status);
-  return await response.json();
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 8500);
+
+  try {
+    const response = await fetch('/api/jinn', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
+      body: JSON.stringify({
+        ans: STATE.answers,
+        rej: STATE.rejected
+      })
+    });
+    clearTimeout(timeoutId);
+    if (!response.ok) throw new Error('API ' + response.status);
+    return await response.json();
+  } catch (err) {
+    clearTimeout(timeoutId);
+    throw err;
+  }
 }
 
 // Next Step Controller
@@ -341,6 +351,11 @@ async function progressTurn() {
   STATE.screen = 'think';
   render();
 
+  // Trigger ASCII mind-reading eye ambiently during deep thinking turns
+  if (typeof triggerFx === 'function' && (STATE.answers.length % 4 === 0 || STATE.answers.length >= 10)) {
+    triggerFx('eye');
+  }
+
   try {
     const data = await fetchDeduction();
     if (data.type === 'guess' && data.name) {
@@ -355,9 +370,9 @@ async function progressTurn() {
     }
   } catch (err) {
     console.warn('API fallback engaged:', err);
-    // Offline deterministic bisection fallback
+    // Offline deterministic bisection fallback guaranteed never to hang
     const qCount = STATE.answers.length;
-    if (qCount >= 12 || qCount >= STATIC_ARCHIVE.length) {
+    if (qCount >= 16 || qCount >= STATIC_ARCHIVE.length) {
       const match = STATIC_ARCHIVE.find(c => !STATE.rejected.includes(c.n)) || STATIC_ARCHIVE[0];
       STATE.currentCandidate = { name: match.n, description: match.d };
       STATE.screen = 'guess';
@@ -370,7 +385,12 @@ async function progressTurn() {
         "Are they known for entertainment, arts or media?",
         "Are they a politician or world leader?",
         "Are they known for professional sports?",
-        "Are they a scientist or business founder?"
+        "Are they a scientist or business founder?",
+        "Are they from North America?",
+        "Are they a musician or singer?",
+        "Are they an actor or film director?",
+        "Are they a journalist or news broadcaster?",
+        "Have they received an international award?"
       ];
       STATE.currentQuestion = questions[qCount % questions.length];
       STATE.screen = 'ask';
@@ -1009,12 +1029,21 @@ function fxFrame(ts) {
   }
 
   bx.clearRect(0, 0, W, H);
-  bx.fillStyle = `rgba(6, 3, 2, ${Math.min(0.94, cov * 1.5)})`;
+  const isIlluminatiTheme = document.body.classList.contains('theme-illuminati');
+  bx.fillStyle = isIlluminatiTheme 
+    ? `rgba(5, 5, 7, ${Math.min(0.96, cov * 1.5)})` 
+    : `rgba(6, 3, 2, ${Math.min(0.94, cov * 1.5)})`;
   bx.fillRect(0, 0, W, H);
   bx.font = `${cs}px "Courier New", monospace`;
   bx.textBaseline = 'top';
+
+  // Palette adapts to theme: Illuminati uses Obsidian, Gold, and Platinum
+  const themeColors = isIlluminatiTheme
+    ? ['#121218', '#332b15', '#6b5722', '#b89430', '#d4af37', '#f8fafc']
+    : ASCII_COL;
+
   B.forEach((a, b) => {
-    bx.fillStyle = ASCII_COL[b];
+    bx.fillStyle = themeColors[b] || ASCII_COL[b];
     for (let k = 0; k < a.length; k += 3) {
       bx.fillText(a[k + 2], a[k], a[k + 1]);
     }

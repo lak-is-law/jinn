@@ -1,139 +1,75 @@
-const Q={M:"Is your person male?",L:"Is your person alive today?",S:"Are they known for science, maths or invention?",R:"Are they known for art, literature or music?",P:"Did they lead, rule or campaign in politics?",T:"Are they famous as an athlete?",E:"Are they from Europe?",I:"Are they from Asia?",U:"Are they from the Americas?",K:"Are they from Africa or the Middle East?",O:"Were they born before 1900?",B:"Did they win a Nobel Prize?",F:"Did they found a company?",H:"Are they known for acting or performing?",G:"Are they tied to religion or spirituality?",W:"Did they fight or command in wars?",C:"Are they famous for music?"};
-const D=`Albert Einstein|Physicist who reshaped space and time|MSEOB
-Marie Curie|Pioneer of radioactivity, two Nobel Prizes|SEOB
-Isaac Newton|Father of classical mechanics|MSEO
-Nikola Tesla|Inventor of AC power systems|MSEUO
-Leonardo da Vinci|Renaissance painter and polymath|MSREO
-Pablo Picasso|Co-founder of Cubism|MREO
-Vincent van Gogh|Post-impressionist painter|MREO
-William Shakespeare|Playwright of Hamlet and Macbeth|MREO
-Wolfgang Mozart|Classical composer prodigy|MREOC
-Michael Jackson|King of Pop|MURHC
-Beyoncé|Global pop and R&B icon|LURHC
-Taylor Swift|Songwriter and stadium-filling pop star|LURCH
-Bob Marley|Reggae legend|MURC
-Mahatma Gandhi|Led India's non-violent independence movement|MPIOG
-Nelson Mandela|Ended apartheid, became president|MPKB
-Martin Luther King Jr.|Civil rights leader|MPUBG
-Abraham Lincoln|16th US president|MPUO
-Napoleon Bonaparte|French emperor and military genius|MPEWO
-Cleopatra|Last active pharaoh of Egypt|PKO
-Winston Churchill|Wartime British prime minister|MPEWOB
-Steve Jobs|Co-founder of Apple|MUF
-Elon Musk|Founder of Tesla and SpaceX|MLUFK
-Bill Gates|Co-founder of Microsoft|MLUF
-Oprah Winfrey|Media mogul and talk-show host|LUH
-Muhammad Ali|The Greatest, heavyweight champion|MUT
-Lionel Messi|Argentine football genius|MLTU
-Cristiano Ronaldo|Portuguese football superstar|MLTE
-Serena Williams|Tennis champion with 23 Grand Slams|LTU
-Pelé|Brazilian football king|MTU
-Sachin Tendulkar|The god of cricket|MLTI
-Bruce Lee|Martial artist and film icon|MTIH
-Malala Yousafzai|Youngest Nobel laureate, education activist|LPIB
-Mother Teresa|Missionary who served the poor|GEB
-Gautama Buddha|Founder of Buddhism|MIOG
-Rabindranath Tagore|Poet, first Asian Nobel laureate|MRIOB
-APJ Abdul Kalam|India's Missile Man and president|MSPI
-Srinivasa Ramanujan|Self-taught mathematical genius|MSIO
-Stephen Hawking|Cosmologist of black holes|MSE
-Charles Darwin|Father of evolution theory|MSEO
-Frida Kahlo|Iconic Mexican painter|RU
-Charlie Chaplin|Silent film comedian|MEHRO
-Walt Disney|Animation pioneer and theme-park builder|MUFHR
-Steven Spielberg|Blockbuster film director|MLUHR
-Genghis Khan|Founder of the Mongol Empire|MPIWO
-Jack Ma|Co-founder of Alibaba|MLIF
-Amitabh Bachchan|Bollywood's Shahenshah|MLIH
-Greta Thunberg|Climate activist|LPE
-Barack Obama|44th US president|MLPUB
-Ada Lovelace|First computer programmer|SEO`.split('\n').map(l=>{const[n,d,t]=l.split('|');return{n,d,t}});
+/* ==========================================================================
+   JINN ORACLE 2.0 — MODERN REACTIVE CLIENT ARCHITECTURE
+   ========================================================================== */
 
-let EYE;
-function M(m){
-  if (document.body.classList.contains('theme-illuminati')) {
-    // Occult Illuminati Pyramid with the All-Seeing Eye of Providence
-    const mo={win:'#00ff9d',lose:'#ff3366',guess:'#00ff9d'}[m]||'#00ff9d';
-    return `<svg class="orb orb-illuminati" viewBox="0 0 200 250" style="overflow:visible"><defs>
-      <linearGradient id="illGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#052e16"/><stop offset="1" stop-color="#02130b"/></linearGradient>
-      <linearGradient id="pyrCap" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00ff9d"/><stop offset="1" stop-color="#059669"/></linearGradient>
-      <radialGradient id="eyeGlow"><stop offset="0" stop-color="#00ff9d" stop-opacity=".7"/><stop offset="1" stop-color="#00ff9d" stop-opacity="0"/></radialGradient>
-      <filter id="illGlow"><feGaussianBlur stdDeviation="4"/><feComposite in="SourceGraphic"/></filter>
-    </defs>
-    <!-- Sacred Geometry Halo -->
-    <circle cx="100" cy="115" r="92" fill="none" stroke="rgba(0,255,157,0.25)" stroke-width="1.5" stroke-dasharray="6,4"/>
-    <circle cx="100" cy="115" r="76" fill="url(#eyeGlow)" opacity=".45"/>
-    <polygon points="100,20 20,185 180,185" fill="none" stroke="rgba(0,255,157,0.3)" stroke-width="1.5"/>
-    <!-- Great Pyramid Base & Layers -->
-    <polygon points="100,25 28,180 172,180" fill="url(#illGrad)" stroke="#00ff9d" stroke-width="2.5"/>
-    <!-- Masonry Brick Lines -->
-    <line x1="45" y1="150" x2="155" y2="150" stroke="rgba(0,255,157,0.35)" stroke-width="1.5"/>
-    <line x1="58" y1="125" x2="142" y2="125" stroke="rgba(0,255,157,0.35)" stroke-width="1.5"/>
-    <line x1="72" y1="100" x2="128" y2="100" stroke="rgba(0,255,157,0.35)" stroke-width="1.5"/>
-    <!-- Floating Capstone with The Eye of Providence -->
-    <polygon points="100,25 68,90 132,90" fill="#041a0f" stroke="#00ff9d" stroke-width="2.5" filter="url(#illGlow)"/>
-    <!-- Golden Occult Eye -->
-    <g class="eyes" transform="translate(0, 5)">
-      <path d="M78 68Q100 48 122 68Q100 88 78 68Z" fill="#02130b" stroke="#00ff9d" stroke-width="2"/>
-      <circle cx="100" cy="68" r="9" fill="url(#pyrCap)"/>
-      <ellipse cx="100" cy="68" rx="3.5" ry="8" fill="#000"/>
-      <circle cx="98" cy="66" r="2" fill="#fff"/>
-    </g>
-    <!-- Occult Runes / Compass rays -->
-    <path d="M100 185L100 230M28 180L10 215M172 180L190 215" stroke="rgba(0,255,157,0.4)" stroke-width="2"/>
-    <circle cx="100" cy="232" r="4" fill="${mo}"/>
-    </svg>`;
-  }
-  const mo={win:'M80 90Q100 116 120 90Z',lose:'M84 99Q100 90 116 99',guess:'M80 90Q100 108 120 89'}[m]||'M82 93Q100 101 118 91';
-  return `<svg class="orb" viewBox="0 0 200 250" style="overflow:visible"><defs><linearGradient id="sm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#27407a"/><stop offset="1" stop-color="#6f8fd0" stop-opacity=".9"/></linearGradient><radialGradient id="hd" cx=".4" cy=".3"><stop offset="0" stop-color="#8fb0d4"/><stop offset="1" stop-color="#3a527f"/></radialGradient><radialGradient id="au"><stop offset="0" stop-color="#1fa6a0" stop-opacity=".28"/><stop offset=".6" stop-color="#D9341C" stop-opacity=".12"/><stop offset="1" stop-opacity="0"/></radialGradient><filter id="sk" x="-40%" y="-10%" width="180%" height="130%"><feTurbulence type="fractalNoise" baseFrequency=".012 .03" numOctaves="2" seed="3"><animate attributeName="baseFrequency" dur="9s" values=".012 .03;.022 .05;.012 .03" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" scale="22"/><feGaussianBlur stdDeviation="2"/></filter><filter id="sk2"><feGaussianBlur stdDeviation="5"/></filter></defs>
-<circle cx="100" cy="95" r="95" fill="url(#au)"/><g filter="url(#sk)" class="tail"><path d="M68 148C52 182 76 202 92 222C100 234 94 246 100 254C106 246 100 234 108 222C124 202 148 182 132 148Z" fill="url(#sm)"/><path d="M72 150C60 180 80 200 100 214C112 222 104 240 112 252C88 246 84 224 78 206C72 190 70 168 72 150Z" fill="#4a64b0" opacity=".7" class="puff2"/></g><g class="smk" fill="#8aa6d8" filter="url(#sk2)"><circle cx="46" cy="150" r="14"/><circle cx="154" cy="146" r="12" style="animation-delay:1.3s"/><circle cx="100" cy="200" r="16" style="animation-delay:2.1s"/><circle cx="68" cy="218" r="12" style="animation-delay:.7s"/><circle cx="134" cy="220" r="13" style="animation-delay:2.8s"/></g>
-<path d="M62 150Q60 112 100 106Q140 112 138 150Z" fill="#27407a"/><path d="M64 120Q100 156 136 120L128 116Q100 140 72 116Z" fill="#E2B54A"/>
-<path d="M58 140Q100 118 142 140Q144 154 132 154Q100 138 68 154Q56 154 58 140Z" fill="#3a5694"/><rect x="60" y="141" width="8" height="12" fill="#E2B54A"/><rect x="132" y="141" width="8" height="12" fill="#E2B54A"/>
-<path d="M70 40L52 112L76 106L80 58Z M130 40L148 112L124 106L120 58Z" fill="#E2B54A"/><g stroke="#1fa6a0" stroke-width="3"><path d="M64 70L78 66M60 86L77 82M56 102L76 98M136 70L122 66M140 86L123 82M144 102L124 98"/></g>
-<ellipse cx="100" cy="66" rx="31" ry="35" fill="url(#hd)"/><circle cx="68" cy="78" r="5" fill="none" stroke="#E2B54A" stroke-width="2"/><circle cx="132" cy="78" r="5" fill="none" stroke="#E2B54A" stroke-width="2"/>
-<g class="eyes"><path d="M76 62Q86 54 96 62Q86 70 76 62ZM104 62Q114 54 124 62Q114 70 104 62Z" fill="#fff" stroke="#000" stroke-width="2.5"/><path d="M73 62L62 57M127 62L138 57" stroke="#000" stroke-width="3"/><g id="ey"><circle cx="86" cy="62" r="4.5" fill="#D9341C"/><circle cx="114" cy="62" r="4.5" fill="#D9341C"/><circle cx="86" cy="62" r="1.8" fill="#000"/><circle cx="114" cy="62" r="1.8" fill="#000"/></g></g>
-<path d="M72 50L96 57M128 50L104 57" stroke="#0E0908" stroke-width="3.5"/><path d="M100 66L96 79Q100 81 104 79" stroke="#243456" fill="none" stroke-width="2"/>
-<path d="${mo}" fill="${m=='win'?'#fff':'none'}" stroke="#0E0908" stroke-width="3" stroke-linejoin="round"/>
-<path d="M94 98H106L104 124H96Z" fill="#E2B54A"/><path d="M95 108H105M95 116H105" stroke="#1fa6a0" stroke-width="2"/>
-<path d="M68 52Q70 20 100 20Q130 20 132 52Q100 38 68 52Z" fill="#E2B54A"/><path d="M70 45Q100 31 130 45" stroke="#1fa6a0" stroke-width="3" fill="none"/>
-<path d="M100 12Q92 20 96 30Q100 36 104 30Q108 20 100 12Z" fill="#D9341C" stroke="#E2B54A" stroke-width="2"/></svg>`;
+// Offline Static Fallback Archive (used only if server connection drops)
+const STATIC_ARCHIVE = `Albert Einstein|Physicist who reshaped space and time
+Marie Curie|Pioneer of radioactivity, two Nobel Prizes
+Isaac Newton|Father of classical mechanics
+Nikola Tesla|Inventor of AC power systems
+Leonardo da Vinci|Renaissance painter and polymath
+Pablo Picasso|Co-founder of Cubism
+Vincent van Gogh|Post-impressionist painter
+William Shakespeare|Playwright of Hamlet and Macbeth
+Wolfgang Mozart|Classical composer prodigy
+Michael Jackson|King of Pop
+Beyoncé|Global pop and R&B icon
+Taylor Swift|Songwriter and stadium-filling pop star
+Mahatma Gandhi|Led India's non-violent independence movement
+Nelson Mandela|Ended apartheid, became president
+Martin Luther King Jr.|Civil rights leader
+Abraham Lincoln|16th US president
+Napoleon Bonaparte|French emperor and military genius
+Cleopatra|Last active pharaoh of Egypt
+Steve Jobs|Co-founder of Apple
+Elon Musk|Founder of Tesla and SpaceX
+Bill Gates|Co-founder of Microsoft
+Lionel Messi|Argentine football superstar
+Cristiano Ronaldo|Portuguese football superstar
+Sachin Tendulkar|Legendary cricketer from India
+Aftab Iqbal|Pakistani television host and satirist
+Hamid Mir|Pakistani journalist and news anchor
+Malala Yousafzai|Youngest Nobel Peace laureate
+Gautama Buddha|Founder of Buddhism
+Stephen Hawking|Cosmologist and theoretical physicist
+Frida Kahlo|Iconic Mexican painter
+Charlie Chaplin|Legend of silent cinema
+Steven Spielberg|Acclaimed Hollywood film director
+Barack Obama|44th US president`.split('\n').map(l => {
+  const [n, d] = l.split('|');
+  return { n, d };
+});
+
+// State Management
+const STATE = {
+  screen: 'intro', // 'intro' | 'ask' | 'think' | 'guess' | 'win' | 'lose'
+  answers: [],     // [[questionText, answerIdx]]
+  rejected: [],    // [rejectedCandidateNames]
+  currentQuestion: null,
+  currentCandidate: null,
+  notice: ''
+};
+
+// Player Stats & Local Storage
+let STATS = { games: 0, wins: 0, stumped: 0, history: [] };
+let PROFILE = null;
+
+try {
+  const savedStats = localStorage.getItem('jinn:stats:v2');
+  if (savedStats) STATS = JSON.parse(savedStats);
+  const savedProfile = localStorage.getItem('jinn:profile');
+  if (savedProfile) PROFILE = JSON.parse(savedProfile);
+} catch (e) {
+  console.warn('Storage read warning', e);
 }
 
-const OPT=["Yes","Probably","Probably not","No"],LK=[[1,.65,.3,.05],[.05,.3,.65,1]];
-let sample=null;
-
-/* Background Arabian Music Player using Desert City by Kevin MacLeod */
-const bgm = new Audio('/audio/arabian-nights.mp3');
-bgm.loop = true;
-bgm.volume = 0.35;
-let musicPlaying = false;
-
-function updateMusicBtn() {
-  const btn = document.getElementById('musicBtn');
-  if (!btn) return;
-  if (musicPlaying) {
-    btn.innerHTML = '<img src="assets/icons/music-on.svg" class="nav-icon" alt="" /> <span>Music: On</span>';
-    btn.classList.add('active');
-  } else {
-    btn.innerHTML = '<img src="assets/icons/music-off.svg" class="nav-icon" alt="" /> <span>Music: Off</span>';
-    btn.classList.remove('active');
-  }
+function saveStats() {
+  try {
+    localStorage.setItem('jinn:stats:v2', JSON.stringify(STATS));
+  } catch (e) {}
 }
 
-function toggleMusic() {
-  if (musicPlaying) {
-    bgm.pause();
-    musicPlaying = false;
-    updateMusicBtn();
-  } else {
-    bgm.play().then(() => {
-      musicPlaying = true;
-      updateMusicBtn();
-    }).catch(e => console.log('Autoplay restriction:', e));
-  }
-}
-
-/* Theme Switcher */
+// Themes Configuration
 const THEMES = [
   { id: 'theme-midnight', name: 'Midnight Tomb' },
   { id: 'theme-illuminati', name: 'Illuminati Order' },
@@ -141,379 +77,542 @@ const THEMES = [
   { id: 'theme-oasis', name: 'Oasis Emerald' },
   { id: 'theme-amethyst', name: 'Royal Sultan' }
 ];
-let currentThemeIdx = 0;
+let currentThemeIndex = 0;
+
 try {
-  const saved = localStorage.getItem('jinn:theme');
-  if (saved) {
-    const idx = THEMES.findIndex(t => t.id === saved);
-    if (idx !== -1) currentThemeIdx = idx;
+  const savedTheme = localStorage.getItem('jinn:theme');
+  if (savedTheme) {
+    const idx = THEMES.findIndex(t => t.id === savedTheme);
+    if (idx !== -1) currentThemeIndex = idx;
   }
-} catch(e) {}
+} catch (e) {}
 
 function applyTheme(idx) {
-  currentThemeIdx = (idx + THEMES.length) % THEMES.length;
-  const theme = THEMES[currentThemeIdx];
+  currentThemeIndex = (idx + THEMES.length) % THEMES.length;
+  const theme = THEMES[currentThemeIndex];
   THEMES.forEach(t => document.body.classList.remove(t.id));
   document.body.classList.add(theme.id);
-  try { localStorage.setItem('jinn:theme', theme.id); } catch(e) {}
-  const btn = document.getElementById('themeBtn');
-  if (btn) btn.innerHTML = `<img src="assets/icons/palette.svg" class="nav-icon" alt="" /> <span>${theme.name}</span>`;
-  if (typeof render === 'function' && document.getElementById('card')?.innerHTML) render();
-}
-applyTheme(currentThemeIdx);
-
-const apiShim={
-  json: async () => {
-    const r = await fetch('/api/jinn', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ ans: S.ans, rej: S.rej })
-    });
-    if(!r.ok) throw new Error('api ' + r.status);
-    return JSON.parse(await r.text());
-  }
-};
-if(!window.claude) sample=apiShim;
-
-async function go(){
-  if(S.ai){
-    if(S.rej.length>=4){
-      S.scr='lose';
-    } else {
-      S.scr='think';
-      render();
-      try {
-        const r = await sample.json();
-        if(r.type=='guess' && r.name){
-          S.cur = { n: r.name, d: r.description || '' };
-          S.scr = 'guess';
-          if(FX) FX.then='eye'; else fx('eye');
-        } else if(r.text){
-          S.cur = r.text;
-          S.scr = 'ask';
-        } else throw 0;
-      } catch(e) {
-        console.error("AI error:", e);
-        S.note = 'The sands are clouded. Retrying...';
-        next();
-      }
-    }
-  } else {
-    next();
-  }
-  if(S.scr==='lose'){ ST.g++; ST.s++; save(); }
+  try { localStorage.setItem('jinn:theme', theme.id); } catch (e) {}
+  const themeLabel = document.getElementById('themeName');
+  if (themeLabel) themeLabel.textContent = theme.name;
   render();
 }
 
-let S={scr:'intro',ans:[],rej:[],cur:null},ST={g:0,w:0,s:0};
-try{ST=JSON.parse(localStorage.getItem('jinn')||'')||ST}catch(e){}
-const save=()=>{try{localStorage.setItem(KEY(),JSON.stringify(ST))}catch(e){}};
-const card=document.getElementById('card'),$=s=>document.querySelector(s);
+// Audio Engine (Authentic Middle Eastern Instrumental BGM)
+const bgm = new Audio('/audio/arabian-nights.mp3');
+bgm.loop = true;
+bgm.volume = 0.32;
+let isMusicActive = false;
 
-function weights(){return D.map(p=>{if(S.rej.includes(p.n))return 0;let w=1;for(const[t,a]of S.ans)w*=LK[p.t.includes(t)?0:1][a];return w})}
-function next(){const w=weights(),sum=w.reduce((a,b)=>a+b,0)||1,asked=S.ans.map(a=>a[0]);
- const top=Math.max(...w),ti=w.indexOf(top);let best=null,bs=9;
- for(const t in Q){if(asked.includes(t))continue;let p=0;D.forEach((d,i)=>{if(d.t.includes(t))p+=w[i]});p/=sum;const sc=Math.abs(p-.5);if(p>.02&&p<.98&&sc<bs){bs=sc;best=t}}
- const n=S.ans.length;
- if(!best||n>=20||(n>=7&&top/sum>.55)||(n>=5&&w.filter(x=>x>top*.02).length<=1)){
-  if(S.rej.length>=4)return S.scr='lose';
-  S.cur=D[ti];S.scr='guess'}else{S.cur=best;S.scr='ask'}}
-
-function bar(){
-  const n=S.ans.length,sz=[2,3,4,5,6],st=[18,15,11,6,0];
-  return `<div class="pyr" role="img" aria-label="${n} of 20 questions asked">`+sz.map((c,r)=>'<div class="pr">'+Array.from({length:c},(_,k)=>`<span class="${st[r]+k<n?'on':''}"></span>`).join('')+'</div>').join('')+'</div>';
+function toggleMusic() {
+  const btn = document.getElementById('musicBtn');
+  const label = document.getElementById('musicLabel');
+  if (isMusicActive) {
+    bgm.pause();
+    isMusicActive = false;
+    if (btn) btn.classList.remove('active');
+    if (label) label.textContent = 'Music';
+  } else {
+    bgm.play().then(() => {
+      isMusicActive = true;
+      if (btn) btn.classList.add('active');
+      if (label) label.textContent = 'Playing';
+    }).catch(e => console.log('Autoplay restriction:', e));
+  }
 }
 
-let PR=null,usr=null;try{PR=JSON.parse(localStorage.getItem('jinn:profile')||'null')}catch(e){}
-const KEY=()=>'jinn'+(PR?':'+PR.id:'');
-function loadST(){try{ST=JSON.parse(localStorage.getItem(KEY())||'')||{g:0,w:0,s:0}}catch(e){ST={g:0,w:0,s:0}}}
+// Mascot SVG Generator (Genie / All-Seeing Eye of Providence)
+function renderMascot(emotion = 'idle') {
+  const isIlluminati = document.body.classList.contains('theme-illuminati');
 
-const md=document.getElementById('modal'),mb=document.getElementById('mbody');
-function modal(h){mb.innerHTML=h;md.classList.add('on');}
-function closeM(){md.classList.remove('on');}
+  if (isIlluminati) {
+    return `<svg class="mascot-svg" viewBox="0 0 200 240" fill="none">
+      <defs>
+        <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#00ff9d" stop-opacity="0.8"/>
+          <stop offset="100%" stop-color="#00ff9d" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="pyrGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0d3822"/>
+          <stop offset="100%" stop-color="#02140a"/>
+        </linearGradient>
+      </defs>
+      <circle cx="100" cy="110" r="85" stroke="rgba(0,255,157,0.2)" stroke-width="1.5" stroke-dasharray="4,4"/>
+      <circle cx="100" cy="110" r="70" fill="url(#eyeGlow)" opacity="0.3"/>
+      <!-- Pyramid Base -->
+      <polygon points="100,20 25,180 175,180" fill="url(#pyrGrad)" stroke="#00ff9d" stroke-width="2"/>
+      <line x1="45" y1="140" x2="155" y2="140" stroke="rgba(0,255,157,0.3)" stroke-width="1.5"/>
+      <line x1="60" y1="110" x2="140" y2="110" stroke="rgba(0,255,157,0.3)" stroke-width="1.5"/>
+      <!-- Floating Eye of Providence -->
+      <polygon points="100,20 65,85 135,85" fill="#031f10" stroke="#00ff9d" stroke-width="2.5"/>
+      <path d="M78 62Q100 44 122 62Q100 80 78 62Z" fill="#021208" stroke="#00ff9d" stroke-width="2"/>
+      <circle cx="100" cy="62" r="8" fill="#00ff9d"/>
+      <circle cx="100" cy="62" r="3.5" fill="#021208"/>
+      <circle cx="98" cy="60" r="1.5" fill="#fff"/>
+    </svg>`;
+  }
 
-function navBtn(){
-  const b=document.getElementById('loginBtn');
-  b.innerHTML=PR?`<img src="assets/icons/ankh.svg" class="nav-icon" alt="" /> <span>${esc(PR.name.slice(0,12))}</span>`:'Login';
-  b.classList.toggle('gold',!!PR);
+  // Classic Genie Mascot
+  const mouthPaths = {
+    win: 'M80 92Q100 114 120 92Z',
+    lose: 'M82 98Q100 90 118 98',
+    guess: 'M80 90Q100 106 120 90Z',
+    idle: 'M82 92Q100 100 118 92'
+  };
+  const mouth = mouthPaths[emotion] || mouthPaths.idle;
+
+  return `<svg class="mascot-svg" viewBox="0 0 200 240">
+    <defs>
+      <radialGradient id="genieSkin" cx="40%" cy="30%">
+        <stop offset="0%" stop-color="#93c5fd"/>
+        <stop offset="100%" stop-color="#2563eb"/>
+      </radialGradient>
+      <radialGradient id="turbanGrad" cx="50%" cy="30%">
+        <stop offset="0%" stop-color="#fde047"/>
+        <stop offset="100%" stop-color="#ca8a04"/>
+      </radialGradient>
+      <radialGradient id="smokeAura">
+        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <!-- Aura -->
+    <circle cx="100" cy="95" r="90" fill="url(#smokeAura)"/>
+    <!-- Tail Smoke -->
+    <path d="M70 145C50 175 75 195 95 215C102 225 96 235 100 240C104 235 98 225 105 215C125 195 150 175 130 145Z" fill="#3b82f6" opacity="0.85"/>
+    <!-- Body & Vest -->
+    <path d="M60 145Q60 110 100 105Q140 110 140 145Z" fill="#1e3a8a"/>
+    <path d="M62 120Q100 152 138 120L130 115Q100 138 70 115Z" fill="url(#turbanGrad)"/>
+    <!-- Head -->
+    <ellipse cx="100" cy="68" rx="30" ry="34" fill="url(#genieSkin)"/>
+    <!-- Eyes -->
+    <g>
+      <path d="M78 62Q88 54 98 62Q88 70 78 62Z" fill="#fff" stroke="#0f172a" stroke-width="2"/>
+      <path d="M102 62Q112 54 122 62Q112 70 102 62Z" fill="#fff" stroke="#0f172a" stroke-width="2"/>
+      <circle cx="88" cy="62" r="4.5" fill="#e11d48"/>
+      <circle cx="112" cy="62" r="4.5" fill="#e11d48"/>
+      <circle cx="88" cy="62" r="2" fill="#000"/>
+      <circle cx="112" cy="62" r="2" fill="#000"/>
+    </g>
+    <!-- Eyebrows & Nose -->
+    <path d="M74 52L96 58M126 52L104 58" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
+    <path d="M100 66L96 78Q100 80 104 78" stroke="#1e40af" fill="none" stroke-width="2"/>
+    <!-- Mouth -->
+    <path d="${mouth}" fill="${emotion === 'win' ? '#fff' : 'none'}" stroke="#0f172a" stroke-width="3" stroke-linejoin="round"/>
+    <!-- Turban & Ruby -->
+    <path d="M68 50Q70 18 100 18Q130 18 132 50Q100 36 68 50Z" fill="url(#turbanGrad)"/>
+    <path d="M100 12Q94 20 96 28Q100 34 104 28Q106 20 100 12Z" fill="#e11d48" stroke="#ca8a04" stroke-width="2"/>
+  </svg>`;
 }
-function afterAuth(){loadST();navBtn();closeM();if(S.scr==='intro')render();}
-function setProf(){try{localStorage.setItem('jinn:profile',JSON.stringify(PR))}catch(e){}afterAuth();}
 
-function loginView(){modal(PR?`<h3>Welcome, ${esc(PR.name)}</h3><p>Signed in ${PR.via==='claude'?'with Claude':'on this device'}. Your stats and history belong to this profile.</p><div class="mrow"><button class="big alt" data-do="out">Sign out</button></div>`:`<h3>Enter the tomb</h3><p>Sign in to keep your own stats and history.</p>${usr?'<button class="big" data-do="claude">Continue with Claude</button><p class="or">or</p>':''}<input id="pname" maxlength="20" placeholder="Choose a name"><div class="mrow"><button class="big alt" data-do="local">Create profile</button><button class="big alt" data-x>Stay a guest</button></div><p class="small">Profiles are saved on this device only.</p>`)}
-function statsView(){const acc=ST.g?Math.round(ST.w/ST.g*100):0;modal(`<h3>${PR?esc(PR.name)+"'s ":''}Stats</h3><div class="mstats"><div><b>${ST.g}</b>games</div><div><b>${ST.w}</b>guessed</div><div><b>${ST.s}</b>stumped</div><div><b>${acc}%</b>accuracy</div></div><h4>Recent souls</h4>${(ST.h||[]).slice().reverse().map(x=>`<p class="hr">${esc(x.n)}<i>${x.q} questions</i></p>`).join('')||'<p class="small">None yet. Play a round.</p>'}`)}
-
-md.onclick=async e=>{
-  const t=e.target,d=t.dataset&&t.dataset.do;
-  if(t===md||(t.dataset&&t.dataset.x!=null))return closeM();
-  if(d==='out'){PR=null;try{localStorage.removeItem('jinn:profile')}catch(x){}afterAuth()}
-  if(d==='local'){const n=(document.getElementById('pname').value||'').trim();if(!n)return;PR={id:'l_'+n.toLowerCase().replace(/\W+/g,'-'),name:n,via:'local'};setProf()}
-  if(d==='claude'){try{const id=await usr.id(),p=(await usr.profiles([id]))[id];PR={id:'c_'+id,name:(p&&p.name)||'Traveller',via:'claude'};setProf()}catch(x){}}
+// Lore Dialogues
+const LORE = {
+  standard: {
+    intro: 'Hold any living or historical soul firmly in thought. I shall deduce who they are within 20 questions.',
+    thinking: 'Scanning the global records… eliminating contradictions…',
+    guess: 'The sands have cleared. I gaze into your thoughts…',
+    win: 'Another mind unveiled. None elude the Jinn.',
+    lose: 'Incredible… your subject transcends my knowledge. You have triumphed!'
+  },
+  illuminati: {
+    intro: 'The All-Seeing Eye awakens. Think of any person worldwide; the secret dossier already holds their name.',
+    thinking: 'Accessing classified intelligence network… filtering subjects…',
+    guess: 'The Order has decrypted your consciousness. The subject is verified…',
+    win: 'The Grand Architect is never mistaken. Dossier finalized.',
+    lose: 'An anomaly in the archives… you have slipped through our observation!'
+  }
 };
 
-addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
+// API Deduction Engine Dispatcher
+async function fetchDeduction() {
+  const response = await fetch('/api/jinn', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      ans: STATE.answers,
+      rej: STATE.rejected
+    })
+  });
+  if (!response.ok) throw new Error('API ' + response.status);
+  return await response.json();
+}
 
-document.querySelector('.nav').onclick=e=>{
-  const k=e.target.dataset.n;
-  if(!k)return;
-  if(k==='music') toggleMusic();
-  if(k==='theme') applyTheme(currentThemeIdx + 1);
-  if(k==='home'){if(FX||S.scr==='intro'||S.scr==='think')return;fx('wipe',()=>{S={scr:'intro',ans:[],rej:[],cur:null};render()})}
-  if(k==='how')modal('<h3>How to play</h3><p>Think of any famous or historic person. The Jinn asks up to 20 questions to deduce who you have in mind.</p><p>Answer truthfully: Yes, Probably, Probably not, or No. Keys 1 to 4 work as shortcuts.</p><p>If a guess is wrong, tell the Jinn and he will try again.</p>');
-  if(k==='stats')statsView();
-  if(k==='login')loginView();
-};
+// Next Step Controller
+async function progressTurn() {
+  if (STATE.rejected.length >= 4) {
+    STATE.screen = 'lose';
+    STATS.games++;
+    STATS.stumped++;
+    saveStats();
+    render();
+    return;
+  }
 
-function esc(x){return String(x).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';')}
-const SAY={
-  intro:'I am the Jinn of the Thousand and One Questions. Bind any soul in thought, and I shall unearth them.',
-  think:'The sands stir… I peer into the archives of memory…',
-  guess:'The sands have spoken! I see into your mind…',
-  win:'Another secret unearthed. None escape me.',
-  lose:'Impossible… your soul lies beyond the tomb. You have stumped the Jinn!'
-};
-const SAY_ILLUMINATI={
-  intro:'The All-Seeing Eye awakens. Hold any human soul in your consciousness; our secret archives already know.',
-  think:'Accessing the classified dossier… scanning global records…',
-  guess:'The Order has intercepted your thoughts! The subject is revealed…',
-  win:'The Grand Architect never fails. Another soul catalogued.',
-  lose:'An anomaly in the archives… you have evaded the All-Seeing Eye!'
-};
-const LAMP='<svg class="lampsvg" viewBox="0 0 200 80"><path d="M30 40C30 66 70 76 100 76C130 76 170 66 170 40Z" fill="#c9922c"/><path d="M26 38H174" stroke="#f0c860" stroke-width="6" stroke-linecap="round"/><path d="M170 40C186 34 192 22 196 12C184 20 176 24 168 28Z" fill="#c9922c"/><path d="M30 42C10 40 6 24 18 18" stroke="#c9922c" stroke-width="6" fill="none"/><ellipse cx="100" cy="40" rx="30" ry="6" fill="#f0c860"/><path d="M70 60Q100 70 130 60" stroke="#8a5f1a" stroke-width="3" fill="none"/></svg>';
+  STATE.screen = 'think';
+  render();
 
-function render(){
-  EYE=M(S.scr);
-  const sc=S.scr,intro=sc==='intro',n=S.ans.length,play=sc=='ask'||sc=='think';
-  card.className='gm';
-  const isIllum = document.body.classList.contains('theme-illuminati');
-  const sayMap = isIllum ? SAY_ILLUMINATI : SAY;
-  
-  let txt=sc==='ask'?(S.ai?S.cur:Q[S.cur]):(sc==='intro'&&PR?`Welcome back, ${PR.name}. Bind a soul in thought, and I shall unearth it.`:sayMap[sc])||'';
-  const scr=`<div class="scroll" data-t="${esc(txt)}">${esc(txt)}</div>`;
-  const mas=`<div class="mas">${sc==='ask'?EYE.replace('class="orb"','class="orb" id="orb"'):EYE}${LAMP}</div>`;
-  const cart=`<div class="cart"><div class="name">${esc(S.cur&&S.cur.n||'')}</div></div><p class="d">${esc(S.cur&&S.cur.d||'')}</p>`;
-  
-  let h=`<div class="tb">
-    <div class="hero"><canvas id="title" width="900" height="260"></canvas></div>
-    <div class="header-meta">
-      ${play?`<span class="qn">Q ${Math.min(20,n+(sc=='ask'?1:0))} / 20</span>`:''}
-      ${bar()}
-    </div>
-  </div>`, side='';
-  
-  if(intro) {
-    side=`${scr}
-    <div class="stats">
-      <div><b>${ST.g}</b>games</div>
-      <div><b>${ST.w}</b>guessed</div>
-      <div><b>${ST.s}</b>stumped</div>
-    </div>
-    <div class="action-row"><button class="big primary-btn" id="start">Wake the Jinn</button></div>
-    <p class="note">${sample?'The Jinn knows every soul on Earth':'Archive mode · 50 souls'}</p>`;
-  }
-  
-  if(sc==='ask') {
-    side=`${scr}
-    <div class="ans">
-      ${OPT.map((o,i)=>`<button class="ans-card a${i}" data-a="${i}"><span class="gem-badge">${i+1}</span><span class="label">${o}</span></button>`).join('')}
-    </div>
-    <div class="ft-bar">
-      <button id="back" class="subtle-btn" ${n?'':'disabled'}>Undo</button>
-      <button id="quit" class="subtle-btn danger">Restart</button>
-    </div>
-    ${S.note?`<p class="note">${esc(S.note)}</p>`:''}`;
-  }
-  
-  if(sc==='think') {
-    side=`${scr}
-    <div class="dots"><span></span><span></span><span></span></div>`;
-  }
-  
-  if(sc==='guess') {
-    side=`${scr}${cart}
-    <div class="action-grid">
-      <button class="big primary-btn" id="yes">Yes, that is them</button>
-      <button class="big secondary-btn" id="no">No, try again</button>
-    </div>`;
-  }
-  
-  if(sc==='win') {
-    side=`${scr}${cart}
-    <p class="d" style="font-weight:700;color:var(--gold-glow)">Unearthed in ${n} questions.</p>
-    <div class="action-grid">
-      <button class="big primary-btn" id="again">Play again</button>
-      <button class="big secondary-btn" id="share">Share result</button>
-    </div>`;
-  }
-  
-  if(sc==='lose') {
-    side=`${scr}<p class="d">Your soul lies beyond the tomb. The Jinn bows to your cunning.</p>
-    <div class="action-row"><button class="big primary-btn" id="again">Play again</button></div>`;
-  }
-  
-  h+=`<div class="stage">${mas}<div class="side">${side}</div></div>`;
-  card.innerHTML=h;
-  
-  ct=$('#title').getContext('2d');
-  clearInterval(window.tw);
-  const bb=$('.scroll');
-  if(bb&&bb.dataset.t&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
-    const t=bb.dataset.t;
-    let i=0;
-    bb.textContent='';
-    window.tw=setInterval(()=>{
-      bb.textContent=t.slice(0,++i);
-      if(i>=t.length)clearInterval(window.tw);
-    }, 16);
-  }
-  
-  const on=(s,f)=>{const e=$(s);if(e)e.onclick=f};
-  on('#start',()=> {
-    // Start authentic background music if not already playing
-    if(!musicPlaying) {
-      bgm.play().then(() => {
-        musicPlaying = true;
-        updateMusicBtn();
-      }).catch(() => {});
+  try {
+    const data = await fetchDeduction();
+    if (data.type === 'guess' && data.name) {
+      STATE.currentCandidate = { name: data.name, description: data.description || '' };
+      STATE.screen = 'guess';
+    } else if (data.text) {
+      STATE.currentQuestion = data.text;
+      STATE.screen = 'ask';
+    } else {
+      throw new Error('Malformed AI response');
     }
-    fx('wipe',()=>{S={scr:'ask',ans:[],rej:[],cur:null,ai:!!sample};go()});
+  } catch (err) {
+    console.warn('API fallback engaged:', err);
+    // Offline deterministic bisection fallback
+    const qCount = STATE.answers.length;
+    if (qCount >= 12 || qCount >= STATIC_ARCHIVE.length) {
+      const match = STATIC_ARCHIVE.find(c => !STATE.rejected.includes(c.n)) || STATIC_ARCHIVE[0];
+      STATE.currentCandidate = { name: match.n, description: match.d };
+      STATE.screen = 'guess';
+    } else {
+      const questions = [
+        "Is your person alive today?",
+        "Are they male?",
+        "Are they from Asia or the Middle East?",
+        "Are they known for entertainment, arts or media?",
+        "Are they a politician or world leader?",
+        "Are they known for professional sports?",
+        "Are they a scientist or business founder?"
+      ];
+      STATE.currentQuestion = questions[qCount % questions.length];
+      STATE.screen = 'ask';
+    }
+  }
+
+  render();
+}
+
+// Reactive Render Loop
+function render() {
+  const container = document.getElementById('game-card');
+  if (!container) return;
+
+  const isIlluminati = document.body.classList.contains('theme-illuminati');
+  const dialogue = isIlluminati ? LORE.illuminati : LORE.standard;
+  const qNum = STATE.answers.length;
+  const isPlaying = STATE.screen === 'ask' || STATE.screen === 'think';
+
+  // Status Bar Markup
+  let headerHtml = `
+    <div class="status-bar">
+      <div class="progress-info">
+        <span class="question-badge">${isPlaying ? `Q ${Math.min(20, qNum + 1)} / 20` : 'ORACLE'}</span>
+        <div class="confidence-tracker">
+          ${Array.from({ length: 10 }).map((_, i) => `<span class="tracker-cell ${i < Math.min(10, Math.floor(qNum / 2) + 1) ? 'filled' : ''}"></span>`).join('')}
+        </div>
+      </div>
+      <div class="brand-sub">${isIlluminati ? 'ORDER OF PROVIDENCE' : 'EGYPTIAN BISECTION'}</div>
+    </div>
+  `;
+
+  let bodyHtml = '';
+
+  if (STATE.screen === 'intro') {
+    bodyHtml = `
+      <div class="inscription-capsule">
+        <div class="inscription-text">${PROFILE ? `Welcome, ${PROFILE.name}. ` : ''}${dialogue.intro}</div>
+      </div>
+      <div class="stats-strip">
+        <div class="stat-item"><span class="stat-num">${STATS.games}</span><span class="stat-label">Rounds</span></div>
+        <div class="stat-item"><span class="stat-num">${STATS.wins}</span><span class="stat-label">Deduced</span></div>
+        <div class="stat-item"><span class="stat-num">${STATS.stumped}</span><span class="stat-label">Stumped</span></div>
+      </div>
+      <button class="btn-primary" id="btn-start">Begin Deduction</button>
+    `;
+  }
+
+  if (STATE.screen === 'ask') {
+    const options = ["Yes", "Probably", "Probably not", "No"];
+    bodyHtml = `
+      <div class="inscription-capsule">
+        <div class="inscription-text">${STATE.currentQuestion || 'Focusing thoughts…'}</div>
+      </div>
+      <div class="answer-grid">
+        ${options.map((opt, idx) => `
+          <button class="answer-card ans-${idx}" data-choice="${idx}">
+            <span class="card-key">${idx + 1}</span>
+            <span class="card-label">${opt}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="control-footer">
+        <button id="btn-undo" class="footer-btn" ${qNum === 0 ? 'disabled' : ''}>← Undo</button>
+        <button id="btn-restart" class="footer-btn danger">Restart</button>
+      </div>
+    `;
+  }
+
+  if (STATE.screen === 'think') {
+    bodyHtml = `
+      <div class="inscription-capsule">
+        <div class="inscription-text">${dialogue.thinking}</div>
+      </div>
+      <div class="pulse-indicator">
+        <span class="pulse-dot"></span>
+        <span class="pulse-dot"></span>
+        <span class="pulse-dot"></span>
+      </div>
+    `;
+  }
+
+  if (STATE.screen === 'guess') {
+    bodyHtml = `
+      <div class="inscription-capsule">
+        <div class="inscription-text">${dialogue.guess}</div>
+      </div>
+      <div class="guess-cartouche">
+        <h2 class="guess-name">${STATE.currentCandidate?.name || 'Unknown'}</h2>
+        <p class="guess-desc">${STATE.currentCandidate?.description || ''}</p>
+      </div>
+      <div class="action-row-split">
+        <button class="btn-primary" id="btn-guess-yes">Yes, That Is Them</button>
+        <button class="btn-secondary" id="btn-guess-no">No, Keep Guessing</button>
+      </div>
+    `;
+  }
+
+  if (STATE.screen === 'win') {
+    bodyHtml = `
+      <div class="inscription-capsule">
+        <div class="inscription-text">${dialogue.win}</div>
+      </div>
+      <div class="guess-cartouche">
+        <h2 class="guess-name">${STATE.currentCandidate?.name}</h2>
+        <p class="guess-desc">Unearthed in ${qNum} questions.</p>
+      </div>
+      <div class="action-row-split">
+        <button class="btn-primary" id="btn-replay">Play Again</button>
+        <button class="btn-secondary" id="btn-share">Share Result</button>
+      </div>
+    `;
+  }
+
+  if (STATE.screen === 'lose') {
+    bodyHtml = `
+      <div class="inscription-capsule">
+        <div class="inscription-text">${dialogue.lose}</div>
+      </div>
+      <button class="btn-primary" id="btn-replay">Play Again</button>
+    `;
+  }
+
+  // Assemble Complete Workspace
+  container.innerHTML = `
+    ${headerHtml}
+    <div class="oracle-stage">
+      <div class="mascot-chamber">
+        ${renderMascot(STATE.screen)}
+      </div>
+      <div class="interactive-panel">
+        ${bodyHtml}
+      </div>
+    </div>
+  `;
+
+  attachEventHandlers();
+}
+
+// Event Bindings
+function attachEventHandlers() {
+  const on = (id, fn) => {
+    const el = document.getElementById(id);
+    if (el) el.onclick = fn;
+  };
+
+  on('btn-start', () => {
+    if (!isMusicActive) toggleMusic();
+    STATE.screen = 'ask';
+    STATE.answers = [];
+    STATE.rejected = [];
+    progressTurn();
   });
-  
-  document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{
-    if(FX)return;
-    $('#orb').classList.add('hit');
-    S.ans.push([S.cur,+b.dataset.a]);
-    fx('wipe',go);
+
+  document.querySelectorAll('[data-choice]').forEach(btn => {
+    btn.onclick = () => {
+      const choice = parseInt(btn.dataset.choice, 10);
+      STATE.answers.push([STATE.currentQuestion, choice]);
+      progressTurn();
+    };
   });
-  
-  on('#back',()=>{
-    if(!S.ans.length||FX)return;
-    if(S.ai){S.cur=S.ans.pop()[0];S.scr='ask';render()}else{S.ans.pop();S.rej=[];next();render()}
+
+  on('btn-undo', () => {
+    if (STATE.answers.length > 0) {
+      STATE.answers.pop();
+      progressTurn();
+    }
   });
-  
-  on('#quit',()=>{
-    S={scr:'intro',ans:[],rej:[],cur:null};
+
+  on('btn-restart', () => {
+    STATE.screen = 'intro';
+    STATE.answers = [];
+    STATE.rejected = [];
+    STATE.currentCandidate = null;
     render();
   });
-  
-  on('#yes',()=>{
-    ST.g++;ST.w++;ST.h=[...(ST.h||[]),{n:S.cur.n,q:S.ans.length}].slice(-8);save();
-    S.scr='win';render();fx('rain');
+
+  on('btn-guess-yes', () => {
+    STATS.games++;
+    STATS.wins++;
+    STATS.history.unshift({ name: STATE.currentCandidate.name, questions: STATE.answers.length });
+    STATS.history = STATS.history.slice(0, 10);
+    saveStats();
+    STATE.screen = 'win';
+    render();
   });
-  
-  on('#no',()=>{
-    S.rej.push(S.cur.n);
-    fx('wipe',go);
+
+  on('btn-guess-no', () => {
+    if (STATE.currentCandidate) {
+      STATE.rejected.push(STATE.currentCandidate.name);
+    }
+    progressTurn();
   });
-  
-  on('#again',()=>fx('wipe',()=>{S={scr:'ask',ans:[],rej:[],cur:null,ai:!!sample};go()}));
-  
-  on('#share',()=>{
-    const t=`The Jinn unearthed ${S.cur.n} in ${S.ans.length} questions on jinn.lakshya.uk`;
-    navigator.clipboard&&navigator.clipboard.writeText(t).then(()=>$('#share').innerHTML='Copied').catch(()=>{});
+
+  on('btn-replay', () => {
+    STATE.screen = 'intro';
+    STATE.answers = [];
+    STATE.rejected = [];
+    STATE.currentCandidate = null;
+    render();
+  });
+
+  on('btn-share', () => {
+    const text = `The Jinn unearthed ${STATE.currentCandidate?.name} in ${STATE.answers.length} questions on jinn.lakshya.uk!`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('btn-share');
+        if (btn) btn.textContent = 'Copied to Clipboard';
+      });
+    }
   });
 }
 
-/* lava title */
-let ct,ot,t=0;const pl=document.createElement('canvas');pl.width=112;pl.height=33;const pc=pl.getContext('2d'),im=pc.createImageData(112,33);
-const rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
-const JP=new Path2D('M173 6L231 6L231 179A75 75 0 0 1 81 179L139 179A17 17 0 0 0 173 179Z M281 6H339V254H281Z M389 254L389 6L449 6L521 150L521 6L579 6L579 254L519 254L447 110L447 254Z M629 254L629 6L689 6L761 150L761 6L819 6L819 254L759 254L687 110L687 254Z');
-function title(){t+=rm?0:.02;const d=im.data;
- for(let y=0;y<33;y++)for(let x=0;x<112;x++){const v=(Math.sin(x*.16+t)+Math.sin(y*.24-t*1.3)+Math.sin((x+y)*.1+t*.7)+Math.sin(Math.hypot(x-56,y-16)*.2-t)+4)/8,c=Math.min(1,v*v*1.6),k=(y*112+x)*4;d[k]=45+195*c;d[k+1]=5+175*c*c*c;d[k+2]=4+45*c**4;d[k+3]=255}
- pc.putImageData(im,0,0);[ct,ot].forEach(c=>{if(!c)return;c.clearRect(0,0,900,260);c.imageSmoothingEnabled=true;c.drawImage(pl,0,0,900,260);c.globalCompositeOperation='destination-in';c.fillStyle='#000';c.fill(JP);c.globalCompositeOperation='source-over'})}
+// Global Nav Listeners
+document.getElementById('themeBtn')?.addEventListener('click', () => applyTheme(currentThemeIndex + 1));
+document.getElementById('musicBtn')?.addEventListener('click', toggleMusic);
 
-/* ASCII scene — 21st.dev style: binary charset, flicker, bloom, scanlines, grain, vignette, glitch */
-const bg=document.getElementById('bg'),bx=bg.getContext('2d'),sc=document.createElement('canvas'),sx=sc.getContext('2d',{willReadFrequently:true});
-let W,H,cs,ch,gw,gh,mx=0,my=0,tx=0,ty=0,last=0;
-const COL=['#3a0d08','#6b160c','#9c2412','#c4521a','#e2b54a','#fff1c0'];
-function rs(){W=bg.width=innerWidth;H=bg.height=innerHeight;cs=Math.max(11,Math.round(W/115));ch=cs*1.3;gw=Math.ceil(W/cs);gh=Math.ceil(H/ch);sc.width=gw;sc.height=gh}rs();addEventListener('resize',rs);
-addEventListener('pointermove',e=>{tx=e.clientX/W-.5;ty=e.clientY/H-.5;const ey=document.getElementById('ey');if(ey)ey.style.transform=`translate(${tx*7}px,${ty*3}px)`;});
-function scene(t){const w=gw,h=gh,cx=w/2,hz=h*.74,R=h*.3+Math.sin(t/1400)*1.2,ey=hz-h*.3;
- sx.fillStyle='#000';sx.fillRect(0,0,w,h);let g=sx.createLinearGradient(0,0,0,hz);g.addColorStop(0,'#050505');g.addColorStop(1,'#606060');sx.fillStyle=g;sx.fillRect(0,0,w,hz);
- sx.fillStyle='#8c8c8c';sx.beginPath();sx.arc(cx,ey,R,0,7);sx.fill();
- sx.fillStyle='#000';sx.beginPath();sx.moveTo(cx-R*.92,ey);sx.quadraticCurveTo(cx,ey-R*.95,cx+R*.92,ey);sx.quadraticCurveTo(cx,ey+R*.95,cx-R*.92,ey);sx.fill();
- sx.strokeStyle='#fff';sx.lineWidth=1.3;sx.stroke();sx.beginPath();sx.moveTo(cx-R*.8,ey-R*.45);sx.quadraticCurveTo(cx,ey-R*1.2,cx+R*.8,ey-R*.45);sx.stroke();
- sx.beginPath();sx.moveTo(cx-R*.1,ey+R*.55);sx.lineTo(cx-R*.2,ey+R*1.1);sx.moveTo(cx-R*.55,ey+R*.3);sx.quadraticCurveTo(cx-R*.9,ey+R*.6,cx-R*.7,ey+R*1.05);sx.stroke();
- const ix=cx+mx*R*.35,iy=ey+my*R*.18;sx.fillStyle='#fff';sx.beginPath();sx.arc(ix,iy,R*.3,0,7);sx.fill();sx.fillStyle='#000';sx.beginPath();sx.ellipse(ix,iy,R*.05,R*.25,0,0,7);sx.fill();
- sx.fillStyle='#000';[[-.02,.36,.17,.24],[.46,.74,.6,.1],[.6,1.02,.82,.2]].forEach(p=>{sx.beginPath();sx.moveTo(w*p[0],hz+2);sx.lineTo(w*p[2],hz-h*p[3]);sx.lineTo(w*p[1],hz+2);sx.fill()});
- sx.fillStyle='#1a1a1a';sx.fillRect(0,hz,w,h-hz);sx.strokeStyle='#4a4a4a';sx.lineWidth=1;for(let k=1;k<4;k++){sx.beginPath();for(let x=0;x<=w;x+=2){const y=hz+k*h*.07+Math.sin(x*.12+k+t/2500)*1.4;x?sx.lineTo(x,y):sx.moveTo(x,y)}sx.stroke()}}
-
-let FX=null,dirty=0;
-function fx(mode,cb){FX={mode,cb,t0:performance.now(),dur:{wipe:950,eye:1800,rain:2300}[mode],done:0}}
-function frame(ts){requestAnimationFrame(frame);if(ts-last<33)return;last=ts;mx+=(tx-mx)*.12;my+=(ty-my)*.12;title();
- if(!FX){if(dirty){bx.clearRect(0,0,W,H);dirty=0}return}dirty=1;
- const p=(ts-FX.t0)/FX.dur;if(p>=1){const th=FX.then;FX=null;bx.clearRect(0,0,W,H);if(th)fx(th);return}
- const st=ts/150|0,B=[[],[],[],[],[],[]],put=(i,j,l,hh)=>{const r=(hh%1000)/1000;l*=.8+.4*r;if(l<.08)return;B[Math.min(5,l*6|0)].push(i*cs,j*ch,l>.8&&r>.88?'*':(hh&1?'1':'0'))},hs=(i,j)=>((i*73856093)^(j*19349663)^(st*83492791))>>>0;
- let cov=0;
- if(FX.mode=='wipe'){cov=p<.5?p*2:(1-p)*2;if(p>=.5&&!FX.done){FX.done=1;FX.cb&&FX.cb();if(S.scr=='guess')FX.then='eye'}
-  const R=cov*1.25;for(let j=0;j<gh;j++)for(let i=0;i<gw;i++){const d=Math.hypot((i/gw-.5)*1.7,j/gh-.5);if(d>R)continue;const e=Math.max(0,1-(R-d)*9);put(i,j,.3+.7*e,hs(i,j))}}
- if(FX.mode=='eye'){cov=Math.sin(p*Math.PI);scene(ts);const d=sx.getImageData(0,0,gw,gh).data;for(let j=0;j<gh;j++)for(let i=0;i<gw;i++)put(i,j,d[(j*gw+i)*4]/255*Math.min(1,cov*1.6),hs(i,j));cov*=.9}
- if(FX.mode=='rain'){const f=Math.min(1,p*6,(1-p)*3);for(let i=0;i<gw;i++){const v=.6+(hs(i,0)%100)/60,hd=(ts/90*v+i*37)%(gh+14);for(let j=0;j<gh;j++){const tr=hd-j;if(tr>=0&&tr<14)put(i,j,(1-tr/14)*f,hs(i,j))}}}
- bx.clearRect(0,0,W,H);bx.fillStyle=`rgba(6,3,2,${Math.min(.94,cov*1.5)})`;bx.fillRect(0,0,W,H);bx.font=`${cs}px "Courier New",monospace`;bx.textBaseline='top';
- B.forEach((a,b)=>{bx.fillStyle=COL[b];for(let k=0;k<a.length;k+=3)bx.fillText(a[k+2],a[k],a[k+1])})}
-
-document.fonts&&document.fonts.load('900 expanded 100px Archivo');
-addEventListener('keydown',e=>{
-  if(S.scr==='ask'&&!FX&&!md.classList.contains('on')&&/^[1-4]$/.test(e.key)){
-    const b=document.querySelector(`[data-a="${+e.key-1}"]`);
-    b&&b.click();
+// Keyboard Shortcuts (1-4 for answers)
+window.addEventListener('keydown', e => {
+  if (STATE.screen === 'ask' && /^[1-4]$/.test(e.key)) {
+    const btn = document.querySelector(`[data-choice="${parseInt(e.key, 10) - 1}"]`);
+    if (btn) btn.click();
   }
 });
 
-const op=document.getElementById('op');
-ot=document.getElementById('optitle').getContext('2d');
-document.getElementById('om').innerHTML=M('intro');
+// Modal Controller
+const modal = document.getElementById('modal');
+const modalTitle = document.getElementById('modal-title');
+const modalBody = document.getElementById('modal-body');
 
-function enter(){
-  if(op.classList.contains('out'))return;
-  op.classList.add('out');
-  // Auto-play the authentic Desert City track on user tap
-  bgm.play().then(() => {
-    musicPlaying = true;
-    updateMusicBtn();
-  }).catch(() => {});
-  fx('wipe',()=>{op.remove();ot=null;});
+function openModal(title, content) {
+  if (modalTitle) modalTitle.textContent = title;
+  if (modalBody) modalBody.innerHTML = content;
+  if (modal) modal.classList.add('active');
 }
-op.onclick=enter;
 
-const of=document.getElementById('opfx'),oc=of.getContext('2d'),P=[];
-of.width=innerWidth;of.height=innerHeight;
-for(let i=0;i<170;i++)P.push({a:Math.random()*6.28,r:.4+Math.random()*.7,s:(Math.random()-.5)*2,z:1+Math.random()*2.6,u:Math.random()});
-const t0=performance.now();
-(function opl(ts){
-  if(!op.isConnected)return;
-  requestAnimationFrame(opl);
-  const tt=(ts-t0)/1000,w=of.width,h=of.height,cx=w/2,cy=h*.44,R=Math.hypot(w,h)/2;
-  oc.clearRect(0,0,w,h);
-  for(const p of P){
-    let x,y,al;
-    if(tt<1.7){
-      const k=tt/1.7;
-      x=cx+Math.cos(p.a+p.s*k*3)*R*p.r*(1-k*k*.97);
-      y=cy+Math.sin(p.a+p.s*k*3)*R*p.r*(1-k*k*.97)*.6;
-      al=.2+.8*k;
-    }else{
-      const k=tt-1.7,sp=p.r*300*(1-Math.exp(-k*1.8))+k*14;
-      x=cx+Math.cos(p.a)*sp*1.2;
-      y=cy+Math.sin(p.a)*sp*.7-k*k*16*p.z;
-      al=Math.max(0,1-k/3.4)*.9;
-    }
-    oc.fillStyle=`rgba(${p.u>.5?'226,181,74':'217,52,28'},${al})`;
-    oc.fillRect(x,y,p.z,p.z);
+function closeModal() {
+  if (modal) modal.classList.remove('active');
+}
+
+document.querySelectorAll('[data-close]').forEach(b => b.onclick = closeModal);
+modal?.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+
+document.querySelector('[data-action="how"]')?.addEventListener('click', () => {
+  openModal('Oracle Rules', `
+    <p>1. Think of any famous or notable person (living or historical, from any country on Earth).</p>
+    <p>2. Answer the Jinn truthfully using the 4 options: <b>Yes</b>, <b>Probably</b>, <b>Probably not</b>, or <b>No</b> (keys 1-4).</p>
+    <p>3. The Jinn uses mathematical bisection and deductive reasoning to guess your subject within 20 questions.</p>
+  `);
+});
+
+document.querySelector('[data-action="stats"]')?.addEventListener('click', () => {
+  const accuracy = STATS.games ? Math.round((STATS.wins / STATS.games) * 100) : 0;
+  const recent = STATS.history.map(h => `<p style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06)"><span>${h.name}</span><span style="opacity:0.6">${h.questions} questions</span></p>`).join('') || '<p style="opacity:0.6">No games recorded yet.</p>';
+  openModal('Tomb Archives', `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin-bottom:18px;">
+      <div style="padding:10px;background:rgba(255,255,255,0.04);border-radius:8px"><b>${STATS.games}</b><div style="font-size:11px;opacity:0.6">Games</div></div>
+      <div style="padding:10px;background:rgba(255,255,255,0.04);border-radius:8px"><b>${STATS.wins}</b><div style="font-size:11px;opacity:0.6">Guessed</div></div>
+      <div style="padding:10px;background:rgba(255,255,255,0.04);border-radius:8px"><b>${accuracy}%</b><div style="font-size:11px;opacity:0.6">Accuracy</div></div>
+    </div>
+    <h4 style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;opacity:0.8">Recent Souls</h4>
+    ${recent}
+  `);
+});
+
+document.getElementById('loginBtn')?.addEventListener('click', () => {
+  if (PROFILE) {
+    openModal('Account Profile', `
+      <p>Logged in as <b>${PROFILE.name}</b></p>
+      <button class="btn-secondary" id="btn-logout" style="margin-top:12px">Sign Out</button>
+    `);
+    document.getElementById('btn-logout')?.addEventListener('click', () => {
+      PROFILE = null;
+      localStorage.removeItem('jinn:profile');
+      document.getElementById('profileName').textContent = 'Sign In';
+      closeModal();
+      render();
+    });
+  } else {
+    openModal('Traveler Profile', `
+      <p>Save your archives and history to this device.</p>
+      <input type="text" id="input-username" class="modal-input" placeholder="Enter your name" maxlength="20" />
+      <button class="btn-primary" id="btn-save-profile">Create Profile</button>
+    `);
+    document.getElementById('btn-save-profile')?.addEventListener('click', () => {
+      const name = (document.getElementById('input-username')?.value || '').trim();
+      if (!name) return;
+      PROFILE = { name };
+      localStorage.setItem('jinn:profile', JSON.stringify(PROFILE));
+      document.getElementById('profileName').textContent = name;
+      closeModal();
+      render();
+    });
   }
-})(t0);
+});
 
-const stg=document.getElementById('stars');
-for(let i=0;i<70;i++){
-  const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
-  c.setAttribute('cx',Math.random()*1600);
-  c.setAttribute('cy',Math.random()*520);
-  c.setAttribute('r',Math.random()*1.6+.4);
-  c.style.animationDelay=Math.random()*4+'s';
-  stg.appendChild(c);
+// Ambient Canvas Particle Generator
+const canvas = document.getElementById('ambient-canvas');
+if (canvas) {
+  const ctx = canvas.getContext('2d');
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+
+  const particles = Array.from({ length: 45 }).map(() => ({
+    x: Math.random() * width,
+    y: Math.random() * height,
+    size: Math.random() * 2 + 0.5,
+    speedY: -Math.random() * 0.4 - 0.1,
+    opacity: Math.random() * 0.6 + 0.2
+  }));
+
+  function animateParticles() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = '#fff';
+    particles.forEach(p => {
+      p.y += p.speedY;
+      if (p.y < 0) { p.y = height; p.x = Math.random() * width; }
+      ctx.globalAlpha = p.opacity;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    requestAnimationFrame(animateParticles);
+  }
+  animateParticles();
 }
 
-loadST();
-navBtn();
-render();
-requestAnimationFrame(frame);
+// Initial Boot
+if (PROFILE) {
+  const profileLabel = document.getElementById('profileName');
+  if (profileLabel) profileLabel.textContent = PROFILE.name;
+}
+applyTheme(currentThemeIndex);

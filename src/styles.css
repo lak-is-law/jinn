@@ -456,18 +456,27 @@ html, body {
   100% { filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 16px var(--accent-glow)); }
 }
 
-/* Illuminati hides the genie lamp since it has the levitating pyramid base */
+/* Illuminati hides the genie lamp since it has the sacred geometric seal */
 body.theme-illuminati .lampsvg {
   display: none;
 }
 body.theme-illuminati .mascot-svg {
   margin-bottom: 0;
-  max-width: 240px;
+  max-width: 250px;
+  filter: drop-shadow(0 14px 34px rgba(212, 175, 55, 0.45));
 }
 
 .illum-ring-outer {
-  animation: illumRingRotate 60s linear infinite;
+  animation: illumRingRotate 50s linear infinite;
   transform-origin: 100px 115px;
+}
+
+.illum-rays line {
+  transition: opacity 0.3s ease;
+}
+
+body.theme-illuminati .mascot-chamber:hover .illum-rays line {
+  opacity: 0.85;
 }
 
 @keyframes illumRingRotate {

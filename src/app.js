@@ -137,8 +137,23 @@ function renderMascot(emotion = 'idle') {
   const isIlluminati = document.body.classList.contains('theme-illuminati');
 
   if (isIlluminati) {
-    // Pure Gold, Black, and Platinum Illuminati Pyramid & All-Seeing Eye
-    const eyeStroke = emotion === 'win' ? '#f5d061' : emotion === 'lose' ? '#cbd5e1' : '#e6b84a';
+    // Sacred Geometric Hexagram / Seal of Providence (Gold, Platinum, and Obsidian)
+    const isWin = emotion === 'win';
+    const isLose = emotion === 'lose';
+    const eyeStroke = isWin ? '#f5d061' : isLose ? '#cbd5e1' : '#e6b84a';
+    
+    // Generate 36 radiating sunburst rays from the center (100, 115)
+    let raysSvg = '';
+    const cx0 = 100, cy0 = 115;
+    for (let deg = 0; deg < 360; deg += 10) {
+      const rad = (deg * Math.PI) / 180;
+      const x1 = cx0 + Math.cos(rad) * 36;
+      const y1 = cy0 + Math.sin(rad) * 22;
+      const x2 = cx0 + Math.cos(rad) * 78;
+      const y2 = cy0 + Math.sin(rad) * 62;
+      raysSvg += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="url(#goldMetallic)" stroke-width="0.8" opacity="0.45"/>`;
+    }
+
     return `<div class="mascot-chamber">
       <svg class="mascot-svg mascot-illuminati" viewBox="0 0 200 240" fill="none" style="overflow:visible">
         <defs>
@@ -147,49 +162,96 @@ function renderMascot(emotion = 'idle') {
             <stop offset="100%" stop-color="#d4af37" stop-opacity="0"/>
           </radialGradient>
           <linearGradient id="pyrGradGold" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#18181f"/>
-            <stop offset="100%" stop-color="#08080a"/>
+            <stop offset="0%" stop-color="#1c1810"/>
+            <stop offset="50%" stop-color="#12100a"/>
+            <stop offset="100%" stop-color="#080705"/>
           </linearGradient>
           <linearGradient id="goldMetallic" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#fdf0cd"/>
-            <stop offset="50%" stop-color="#d4af37"/>
-            <stop offset="100%" stop-color="#997210"/>
+            <stop offset="0%" stop-color="#fff2c6"/>
+            <stop offset="35%" stop-color="#e6b84a"/>
+            <stop offset="70%" stop-color="#b38728"/>
+            <stop offset="100%" stop-color="#fbf5b7"/>
           </linearGradient>
           <linearGradient id="platinumMetallic" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stop-color="#ffffff"/>
             <stop offset="50%" stop-color="#e2e8f0"/>
             <stop offset="100%" stop-color="#94a3b8"/>
           </linearGradient>
+          <radialGradient id="sunburstGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#2a2212"/>
+            <stop offset="75%" stop-color="#14110b"/>
+            <stop offset="100%" stop-color="#080705"/>
+          </radialGradient>
           <filter id="goldShine">
-            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feGaussianBlur stdDeviation="2.5" result="blur"/>
             <feComposite in="SourceGraphic" in2="blur" operator="over"/>
           </filter>
         </defs>
-        <!-- Sacred Geometry Platinum Ring -->
-        <circle cx="100" cy="115" r="88" stroke="url(#platinumMetallic)" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6" class="illum-ring-outer"/>
-        <circle cx="100" cy="115" r="72" fill="url(#illumGlow)" opacity="0.4"/>
-        <!-- Great Obsidian Pyramid Base -->
-        <polygon points="100,22 24,182 176,182" fill="url(#pyrGradGold)" stroke="url(#goldMetallic)" stroke-width="2.5"/>
-        <!-- Platinum Masonry Mortar Lines -->
-        <line x1="44" y1="148" x2="156" y2="148" stroke="url(#platinumMetallic)" stroke-width="1.2" opacity="0.7"/>
-        <line x1="58" y1="120" x2="142" y2="120" stroke="url(#platinumMetallic)" stroke-width="1.2" opacity="0.7"/>
-        <line x1="72" y1="94" x2="128" y2="94" stroke="url(#platinumMetallic)" stroke-width="1.2" opacity="0.7"/>
-        <!-- Floating Golden Capstone -->
-        <polygon points="100,22 66,88 134,88" fill="#121218" stroke="url(#goldMetallic)" stroke-width="2.5" filter="url(#goldShine)"/>
-        <!-- Eye of Providence -->
-        <g class="genie-eyes" transform="translate(0, 4)">
-          <path d="M78 64Q100 46 122 64Q100 82 78 64Z" fill="#08080c" stroke="url(#platinumMetallic)" stroke-width="2"/>
+
+        <!-- Outer Distressed Sacred Aura Rings -->
+        <circle cx="100" cy="115" r="94" stroke="url(#goldMetallic)" stroke-width="1.2" stroke-dasharray="3,5" opacity="0.4" class="illum-ring-outer"/>
+        <circle cx="100" cy="115" r="88" stroke="url(#platinumMetallic)" stroke-width="1.8" stroke-dasharray="8,6" opacity="0.65"/>
+        <circle cx="100" cy="115" r="80" stroke="url(#goldMetallic)" stroke-width="1" opacity="0.3"/>
+        <circle cx="100" cy="115" r="76" fill="url(#illumGlow)" opacity="0.3"/>
+
+        <!-- Outer Hexagram Base: Upright & Inverted Interlocking Triangles -->
+        <!-- Inverted Triangle (Downward) -->
+        <polygon points="100,195 24,65 176,65" fill="#0d0c0a" stroke="url(#goldMetallic)" stroke-width="2.5"/>
+        <polygon points="100,185 34,73 166,73" fill="#14110c" stroke="url(#platinumMetallic)" stroke-width="1" opacity="0.6"/>
+
+        <!-- Upright Main Triangle (Upward Apex) -->
+        <polygon points="100,25 24,165 176,165" fill="url(#pyrGradGold)" stroke="url(#goldMetallic)" stroke-width="3" filter="url(#goldShine)"/>
+        <!-- Inner Stepped Border -->
+        <polygon points="100,41 38,154 162,154" fill="url(#sunburstGrad)" stroke="url(#goldMetallic)" stroke-width="1.8"/>
+        <polygon points="100,52 48,145 152,145" fill="none" stroke="url(#platinumMetallic)" stroke-width="1" opacity="0.5"/>
+
+        <!-- Radiating Sunburst Rays inside the Inner Sanctum -->
+        <g class="illum-rays">
+          ${raysSvg}
+        </g>
+
+        <!-- Corner Occult Crescents & Orbs in the Star Peaks -->
+        <!-- Top Left Corner -->
+        <g transform="translate(48, 80)">
+          <path d="M-8 4Q0 -8 8 4Q0 0 -8 4Z" fill="url(#goldMetallic)" opacity="0.8"/>
+          <circle cx="0" cy="5" r="3.2" fill="url(#platinumMetallic)"/>
+        </g>
+        <!-- Top Right Corner -->
+        <g transform="translate(152, 80)">
+          <path d="M-8 4Q0 -8 8 4Q0 0 -8 4Z" fill="url(#goldMetallic)" opacity="0.8"/>
+          <circle cx="0" cy="5" r="3.2" fill="url(#platinumMetallic)"/>
+        </g>
+        <!-- Bottom Peak Corner -->
+        <g transform="translate(100, 168)">
+          <path d="M-7 -2Q0 -10 7 -2Q0 -5 -7 -2Z" fill="url(#goldMetallic)" opacity="0.8"/>
+          <circle cx="0" cy="4" r="2.8" fill="url(#platinumMetallic)"/>
+        </g>
+
+        <!-- The Central Sacred Eye of Providence -->
+        <g class="genie-eyes" transform="translate(0, 0)">
+          <!-- Outer Eye Sclera / Almond Shape -->
+          <path d="M60 115Q100 82 140 115Q100 148 60 115Z" fill="#080706" stroke="url(#goldMetallic)" stroke-width="3"/>
+          <path d="M66 115Q100 88 134 115Q100 142 66 115Z" fill="#120e09" stroke="url(#platinumMetallic)" stroke-width="1.2" opacity="0.8"/>
+          
+          <!-- Outer Iris Gold Ring -->
+          <circle cx="100" cy="115" r="18" fill="none" stroke="url(#goldMetallic)" stroke-width="2"/>
+          <circle cx="100" cy="115" r="15.5" fill="#181308"/>
+
+          <!-- Dynamic Looking Pupil & Glint -->
           <g id="illumEyePupil">
-            <circle cx="100" cy="64" r="8.5" fill="url(#goldMetallic)"/>
-            <ellipse cx="100" cy="64" rx="3.5" ry="7.5" fill="#000"/>
-            <circle cx="98" cy="62" r="1.8" fill="#fff"/>
+            <!-- Iris Disk -->
+            <circle cx="100" cy="115" r="13.5" fill="url(#goldMetallic)"/>
+            <!-- Pupil Core -->
+            <ellipse cx="100" cy="115" rx="6.5" ry="11" fill="#000"/>
+            <!-- Arc Highlight / Light Reflection -->
+            <circle cx="97" cy="112" r="2.8" fill="#ffffff" opacity="0.95"/>
+            <circle cx="103" cy="117" r="1.2" fill="#ffffff" opacity="0.6"/>
           </g>
         </g>
-        <!-- Golden Meridian Compass Lines -->
-        <line x1="100" y1="184" x2="100" y2="224" stroke="url(#goldMetallic)" stroke-width="2" opacity="0.8"/>
-        <line x1="24" y1="182" x2="10" y2="212" stroke="url(#platinumMetallic)" stroke-width="1.8" opacity="0.6"/>
-        <line x1="176" y1="182" x2="190" y2="212" stroke="url(#platinumMetallic)" stroke-width="1.8" opacity="0.6"/>
-        <circle cx="100" cy="226" r="4.5" fill="url(#goldMetallic)"/>
+
+        <!-- Sacred Lower Keystone Ornament -->
+        <polygon points="100,195 94,185 106,185" fill="url(#goldMetallic)"/>
+        <circle cx="100" cy="204" r="3.5" fill="url(#platinumMetallic)"/>
       </svg>
     </div>`;
   }
